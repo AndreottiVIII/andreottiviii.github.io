@@ -28,3 +28,11 @@ npm start      # http://localhost:8080
 ```
 
 In un articolo, una **galleria** è un elenco puntato di sole immagini; una **didascalia** è una riga in corsivo subito sotto un'immagine.
+
+## Rete di sicurezza
+
+Dopo la build, il workflow lancia `node scripts/check-urls.mjs`. Lo script ha dentro l'elenco fisso dei 142 indirizzi della sitemap di Squarespace, più `/work` e la home, e verifica che in `_site` esista il file che GitHub Pages servirà per ognuno. Controlla anche che `<title>` e meta description non siano vuoti (la description può mancare solo dove mancava già sul vecchio sito: tag, categorie e 4 articoli). Se manca anche un solo indirizzo il lavoro fallisce **prima** del deploy e il sito online resta com'era.
+
+In locale, dopo `npx eleventy`: `node scripts/check-urls.mjs`. Su Windows segnala `/post/tag/Medium+format`, perché lì i due tag che differiscono solo per le maiuscole si sovrappongono: su GitHub Actions (Linux) non succede e fa fede quello.
+
+Gli indirizzi vecchi non si tolgono né si rinominano. Se un giorno uno deve sparire davvero, si toglie dall'elenco nello script, di proposito e in un commit a parte.

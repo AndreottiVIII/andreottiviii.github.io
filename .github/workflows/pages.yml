@@ -30,7 +30,16 @@ jobs:
           path: .cache
           key: img-w-${{ hashFiles('src/img/**') }}
           restore-keys: img-w-
+      # PATH_PREFIX e MOCKUP si impostano per repo (Settings > Variables): vuote sul sito, "/lab/" e "true" nel laboratorio
       - run: npx eleventy
+        env:
+          PATH_PREFIX: ${{ vars.PATH_PREFIX }}
+          MOCKUP: ${{ vars.MOCKUP }}
+      # rete di sicurezza: se manca uno solo degli indirizzi vecchi il lavoro fallisce qui, prima del deploy
+      - name: Rete di sicurezza (indirizzi vecchi, title, description)
+        run: node scripts/check-urls.mjs
+        env:
+          PATH_PREFIX: ${{ vars.PATH_PREFIX }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
