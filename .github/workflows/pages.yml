@@ -1,0 +1,38 @@
+name: Deploy test
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: make test files
+        run: |
+          mkdir -p _site/post/tag _site/zz _site/yy/index
+          echo '<!doctype html><title>HOME</title>home root' > _site/index.html
+          echo '<!doctype html><title>INDEXPAGE-file</title>indexpage' > _site/index
+          echo '<!doctype html><title>t1</title>t1' > '_site/post/tag/Contax+645.html'
+          echo '<!doctype html><title>t2</title>t2' > '_site/post/tag/Point+&+shoot.html'
+          echo '<!doctype html><title>t3</title>t3' > '_site/post/tag/Point+and+shoot.html'
+          echo '<!doctype html><title>mf</title>mf' > '_site/post/tag/Medium+format.html'
+          echo '<!doctype html><title>MF</title>MF' > '_site/post/tag/Medium+Format.html'
+          echo '<!doctype html><title>p</title>portrait' > '_site/portrait-.html'
+          echo '<!doctype html><title>zzfile</title>zzfile' > _site/zz/index
+          echo '<!doctype html><title>zzidx</title>zzidx' > _site/zz/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
