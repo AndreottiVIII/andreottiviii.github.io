@@ -1,0 +1,15 @@
+<div class="blog-list">
+{%- for p in items %}
+  <article class="blog-item">
+    {%- if p.data.cover %}
+    <a class="blog-image" href="{{ p.url | cleanUrl }}" tabindex="-1" aria-hidden="true"><img src="{{ p.data.cover }}" alt="" sizes="(max-width: 800px) 100vw, 720px"></a>
+    {%- endif %}
+    <div class="blog-item-text">
+      <div class="blog-meta">{% for c in p.data.categories %}<a class="blog-categories" href="{{ c | categoryUrl }}">{{ c }}</a> {% endfor %}{% if p.data.author %}<span class="blog-author">{{ p.data.author }}</span> {% endif %}<time class="blog-date" datetime="{{ p.date | dateISO }}">{{ p.date | dateShort }}</time></div>
+      <h2 class="blog-title"><a href="{{ p.url | cleanUrl }}">{{ p.data.title }}</a></h2>
+      <div class="blog-excerpt">{{ p.data.excerpt | mdBlock | safe }}</div>
+      <a class="blog-more-link" href="{{ p.url | cleanUrl }}" aria-label="Read More: {{ p.data.title }}">Read More</a>
+    </div>
+  </article>
+{%- endfor %}
+</div>

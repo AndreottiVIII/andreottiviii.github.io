@@ -1,0 +1,24 @@
+---
+permalink: /sitemap.xml
+eleventyExcludeFromCollections: true
+---
+{%- set origin = site.mock_url if site.mockup else site.url -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>{{ origin }}/</loc></url>
+  <url><loc>{{ origin }}/post</loc></url>
+  {%- for p in collections.posts | notDuplicate %}
+  <url><loc>{{ origin }}{{ p.url | cleanUrl }}</loc><lastmod>{{ p.date | dateISO }}</lastmod></url>
+  {%- endfor %}
+  {%- for c in collections.categoryList %}
+  <url><loc>{{ origin }}{{ c.name | categoryUrl | xmlEscape }}</loc></url>
+  {%- endfor %}
+  {%- for t in collections.tagList %}
+  <url><loc>{{ origin }}{{ t.name | tagUrl | xmlEscape }}</loc></url>
+  {%- endfor %}
+  {%- for w in site.work %}
+  <url><loc>{{ origin }}{{ w.url }}</loc></url>
+  {%- endfor %}
+  <url><loc>{{ origin }}/blog-index</loc></url>
+  <url><loc>{{ origin }}/contact-davidecaniatti</loc></url>
+</urlset>

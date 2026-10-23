@@ -1,0 +1,31 @@
+---
+layout: layouts/base.njk
+title: Blog
+description: "I blog about art and photography, keeping an eye on the latest trends and yesterday's forgotten gems"
+pagination:
+  data: collections.posts
+  size: 20
+  alias: items
+permalink: "{% if pagination.pageNumber == 0 %}/post.html{% else %}/post/page/{{ pagination.pageNumber + 1 }}.html{% endif %}"
+eleventyExcludeFromCollections: true
+eleventyComputed:
+  canonical: "{% if pagination.pageNumber == 0 %}/post{% else %}/post/page/{{ pagination.pageNumber + 1 }}{% endif %}"
+---
+<div class="archive">
+{% include "post-list.njk" %}
+<nav class="archive-nav" aria-label="Pagination">
+  {%- if pagination.pageNumber > 0 %}
+  <a class="newer" href="{% if pagination.pageNumber == 1 %}/post{% else %}/post/page/{{ pagination.pageNumber }}{% endif %}">Newer Posts</a>
+  {%- else %}<span></span>{% endif %}
+  {%- if pagination.pageNumber < pagination.pages.length - 1 %}
+  <a class="older" href="/post/page/{{ pagination.pageNumber + 2 }}">Older Posts</a>
+  {%- endif %}
+</nav>
+</div>
+<script>
+/* Vecchi indirizzi del blog: /post?tag=X, /post?category=X, /post?offset=N */
+(function(){var q=new URLSearchParams(location.search),e=function(s){return encodeURIComponent(s).replace(/%20/g,'+');};
+if(q.get('tag'))location.replace('/post/tag/'+e(q.get('tag')));
+else if(q.get('category'))location.replace('/post/category/'+e(q.get('category')));
+else if(q.get('offset'))location.replace('/post/page/2');})();
+</script>

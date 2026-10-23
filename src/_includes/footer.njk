@@ -1,0 +1,8 @@
+<footer class="site-footer">
+  <ul class="social">
+    {%- for s in site.social %}
+    <li><a href="{{ s.href }}" target="_blank" rel="noopener" aria-label="{{ s.label }}">{% include "icons/" + s.icon + ".svg" %}</a></li>
+    {%- endfor %}
+  </ul>
+  <button type="button" class="cookie-reopen" data-cookie-open>Cookie</button>
+</footer>

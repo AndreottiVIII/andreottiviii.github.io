@@ -1,0 +1,17 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: collections.categoryList
+  size: 1
+  alias: category
+permalink: "{{ category.name | categoryFile | safe }}"
+eleventyExcludeFromCollections: true
+eleventyComputed:
+  headTitle: "{{ category.name | safe }} — Blog — Davide Caniatti"
+  canonical: "{{ category.name | categoryUrl }}"
+---
+<div class="archive">
+<h1 class="archive-title" data-kind="Category" data-title="{{ category.name }}" aria-label="{{ category.name }}"></h1>
+{% set items = category.posts %}
+{% include "post-list.njk" %}
+</div>

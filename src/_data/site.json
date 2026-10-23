@@ -1,0 +1,62 @@
+{
+  "mockup": true,
+  "name": "Davide Caniatti",
+  "url": "https://davidecaniatti.com",
+  "mock_url": "https://andreottiviii.github.io",
+  "ga_id": "G-B6VJN8NGT4",
+  "blog_description": "I blog about art and photography, keeping an eye on the latest trends and yesterday's forgotten gems",
+  "social": [
+    {
+      "label": "Instagram",
+      "href": "http://instagram.com/davide.caniatti",
+      "icon": "instagram"
+    },
+    {
+      "label": "LinkedIn",
+      "href": "http://linkedin.com/in/davide-caniatti-86b54b174",
+      "icon": "linkedin"
+    },
+    {
+      "label": "Facebook",
+      "href": "http://facebook.com/davide.caniatti",
+      "icon": "facebook"
+    },
+    {
+      "label": "YouTube",
+      "href": "http://youtube.com/@davidecaniatti3627",
+      "icon": "youtube"
+    },
+    {
+      "label": "Medium",
+      "href": "https://medium.com/@davidecaniatti",
+      "icon": "medium"
+    },
+    {
+      "label": "IMDb",
+      "href": "https://www.imdb.com/it/name/nm8707052/",
+      "icon": "imdb"
+    }
+  ],
+  "work": [
+    {
+      "title": "Portrait",
+      "url": "/portrait-"
+    },
+    {
+      "title": "Out of time",
+      "url": "/out-of-time"
+    },
+    {
+      "title": "Still Life",
+      "url": "/still-life"
+    },
+    {
+      "title": "Corporate",
+      "url": "/corporate"
+    },
+    {
+      "title": "Milano Lockdown",
+      "url": "/human-nature-wells"
+    }
+  ]
+}

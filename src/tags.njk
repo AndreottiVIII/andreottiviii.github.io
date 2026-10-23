@@ -1,0 +1,17 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: collections.tagList
+  size: 1
+  alias: tag
+permalink: "{{ tag.name | tagFile | safe }}"
+eleventyExcludeFromCollections: true
+eleventyComputed:
+  headTitle: "{{ tag.name | safe }} — Blog — Davide Caniatti"
+  canonical: "{{ tag.name | tagUrl }}"
+---
+<div class="archive">
+<h1 class="archive-title" data-kind="Tag" data-title="{{ tag.name }}" aria-label="{{ tag.name }}"></h1>
+{% set items = tag.posts %}
+{% include "post-list.njk" %}
+</div>

@@ -1,0 +1,19 @@
+<header class="site-header">
+  <a class="site-title" href="/">{{ site.name }}</a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><span></span><span></span></button>
+  <nav id="site-nav" class="site-nav" aria-label="Main">
+    <ul>
+      <li><a href="/post"{% if (page.url | cleanUrl) == '/post' %} aria-current="page"{% endif %}>Blog</a></li>
+      <li class="has-sub">
+        <a href="/work" class="sub-label">Work</a>
+        <ul class="sub">
+          {%- for w in site.work %}
+          <li><a href="{{ w.url }}"{% if (page.url | cleanUrl) == w.url %} aria-current="page"{% endif %}>{{ w.title }}</a></li>
+          {%- endfor %}
+        </ul>
+      </li>
+      <li><a href="/blog-index"{% if (page.url | cleanUrl) == '/blog-index' %} aria-current="page"{% endif %}>Index</a></li>
+      <li><a href="/contact-davidecaniatti"{% if (page.url | cleanUrl) == '/contact-davidecaniatti' %} aria-current="page"{% endif %}>About me</a></li>
+    </ul>
+  </nav>
+</header>

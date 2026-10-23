@@ -1,0 +1,36 @@
+---
+layout: layouts/base.njk
+---
+{%- set body = content -%}
+{%- if duplicate_of -%}
+  {%- set orig = collections.posts | findUrl(duplicate_of + '.html') -%}
+  {%- set body = orig.templateContent -%}
+{%- endif -%}
+{%- set newer = collections.posts | neighbour(page.url, -1) -%}
+{%- set older = collections.posts | neighbour(page.url, 1) -%}
+<article class="post h-entry">
+  <header class="post-header">
+    <h1 class="entry-title">{{ title }}</h1>
+    <div class="post-meta">
+      {%- if categories %}<span class="post-categories">{% for c in categories %}<a href="{{ c | categoryUrl }}">{{ c }}</a>{% endfor %}</span>{% endif %}
+      <time class="dt-published" datetime="{{ page.date | dateISO }}">{{ page.date | dateMD }}</time>
+      {%- if author %}<span class="post-author">Written by {{ author }}</span>{% endif %}
+    </div>
+  </header>
+  <div class="post-body e-content">
+{{ body | safe }}
+  </div>
+  {%- if labels %}
+  <footer class="post-tags">
+    {%- for t in labels %}<a href="{{ t | tagUrl }}" rel="tag">{{ t }}</a>{% endfor %}
+  </footer>
+  {%- endif %}
+  <nav class="post-nav" aria-label="Posts">
+    {%- if newer %}
+    <a class="prev" href="{{ newer.url | cleanUrl }}"><span class="label">Previous</span><span class="t">{{ newer.data.title }}</span></a>
+    {%- else %}<span></span>{% endif %}
+    {%- if older %}
+    <a class="next" href="{{ older.url | cleanUrl }}"><span class="label">Next</span><span class="t">{{ older.data.title }}</span></a>
+    {%- endif %}
+  </nav>
+</article>

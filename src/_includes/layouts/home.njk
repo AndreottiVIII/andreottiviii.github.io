@@ -1,0 +1,43 @@
+---
+layout: layouts/base.njk
+---
+{%- set H = { hero: hero, button: button, latest_heading: latest_heading, featured_label: featured_label, slideshow: slideshow, bio: content } -%}
+{%- if copy_of -%}
+  {%- set S = collections.pageDocs | pageByKey(copy_of) -%}
+  {%- set H = { hero: S.data.hero, button: S.data.button, latest_heading: S.data.latest_heading, featured_label: S.data.featured_label, slideshow: S.data.slideshow, bio: S.templateContent } -%}
+{%- endif -%}
+<script>if(location.pathname==='/index')location.replace('/blog-index');</script>
+<section class="home-hero">
+  <figure class="home-hero-image"><img src="{{ H.hero.image }}" alt="{{ H.hero.alt }}" sizes="(max-width: 800px) 100vw, 50vw" loading="eager" fetchpriority="high"></figure>
+  <div class="home-hero-text">
+{{ H.bio | safe }}
+    <p><a class="button" href="{{ H.button.href }}">{{ H.button.text }}</a></p>
+  </div>
+</section>
+<section class="home-latest">
+  <h3>{{ H.latest_heading }}</h3>
+  <p class="featured-label">{{ H.featured_label }}</p>
+  <div class="cards">
+  {%- for p in collections.posts | notDuplicate | limit(3) %}
+    <article class="card">
+      <a class="card-image" href="{{ p.url | cleanUrl }}" tabindex="-1" aria-hidden="true">{% if p.data.cover %}<img src="{{ p.data.cover }}" alt="" sizes="(max-width: 800px) 100vw, 33vw">{% endif %}</a>
+      <div class="card-tags">{% for t in p.data.labels %}<a href="{{ t | tagUrl }}">{{ t }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</div>
+      <h4 class="card-title"><a href="{{ p.url | cleanUrl }}">{{ p.data.title }}</a></h4>
+      <div class="card-excerpt">{{ p.data.excerpt | mdBlock | safe }}</div>
+      <a class="card-more" href="{{ p.url | cleanUrl }}">Read more →</a>
+    </article>
+  {%- endfor %}
+  </div>
+</section>
+<section class="slideshow" data-slideshow aria-roledescription="carousel" aria-label="Photos">
+  {%- for s in H.slideshow %}
+  <figure class="slide{% if loop.first %} is-active{% endif %}"><img src="{{ s.image }}" alt="{{ s.alt }}" sizes="100vw"{% if not loop.first %} loading="lazy"{% endif %}></figure>
+  {%- endfor %}
+  <button type="button" class="slide-prev" aria-label="Previous">‹</button>
+  <button type="button" class="slide-next" aria-label="Next">›</button>
+</section>
+<div class="slide-thumbs" data-thumbs>
+  {%- for s in H.slideshow %}
+  <button type="button" class="thumb{% if loop.first %} is-active{% endif %}" aria-label="Slide {{ loop.index }}"><img src="{{ s.image }}" alt="" sizes="96px" loading="lazy"></button>
+  {%- endfor %}
+</div>

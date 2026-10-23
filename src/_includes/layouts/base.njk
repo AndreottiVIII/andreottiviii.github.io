@@ -1,0 +1,47 @@
+{%- set origin = site.mock_url if site.mockup else site.url -%}
+{%- set pageUrl = canonical or (page.url | cleanUrl) -%}
+{%- set fullTitle = headTitle or ((seo_title or title) + " — " + site.name) -%}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ fullTitle }}</title>
+{%- if site.mockup %}
+<meta name="robots" content="noindex, nofollow">
+{%- endif %}
+{%- if description %}
+<meta name="description" content="{{ description }}">
+{%- endif %}
+{%- if redirect_to %}
+<meta http-equiv="refresh" content="0; url={{ redirect_to }}">
+{%- endif %}
+<link rel="canonical" href="{{ pageUrl | absUrl(site.url) }}">
+<link rel="icon" href="/img/favicon.png">
+<link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="/post/rss.xml">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:title" content="{{ fullTitle }}">
+<meta property="og:url" content="{{ pageUrl | absUrl(site.url) }}">
+<meta property="og:type" content="website">
+{%- if description %}
+<meta property="og:description" content="{{ description }}">
+{%- endif %}
+{%- if cover %}
+<meta property="og:image" content="{{ origin }}{{ cover }}">
+{%- endif %}
+<meta name="twitter:card" content="summary">
+<link rel="preload" href="/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>window.SITE={mockup:{{ 'true' if site.mockup else 'false' }}{% if not site.mockup %},gaId:"{{ site.ga_id }}"{% endif %}};</script>
+</head>
+<body>
+<a class="skip-link" href="#page">Skip to Content</a>
+{% include "header.njk" %}
+<main id="page">
+{{ content | safe }}
+</main>
+{% include "footer.njk" %}
+{% include "cookie.njk" %}
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

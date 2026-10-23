@@ -1,0 +1,10 @@
+---
+layout: layouts/base.njk
+---
+<section class="gallery-page" aria-label="{{ title }}">
+  <div class="gallery-grid" data-lightbox>
+    {%- for g in gallery %}
+    <a class="lb" href="{{ g.image }}" data-alt="{{ g.alt }}"><img src="{{ g.image }}" alt="{{ g.alt }}" sizes="(max-width: 700px) 50vw, 33vw">{% if fullsize_label != false %}<span class="sr-only">View fullsize</span>{% endif %}</a>
+    {%- endfor %}
+  </div>
+</section>
