@@ -21,9 +21,8 @@ jobs:
       - name: make test files
         run: |
           mkdir -p _site/post/tag _site/zz _site/yy/index
-          echo '<!doctype html><title>HOME</title>home root' > _site/index.html
-          mkdir -p _site/index; echo '<!doctype html><title>INDEXDIR</title>indexdir' > _site/index/index.html
-          echo '<!doctype html><title>t1</title>t1' > '_site/post/tag/Contax+645.html'
+          echo '<!doctype html><title>HOMEHTM</title>home htm' > _site/index.htm; echo '<!doctype html><title>INDEXHTML</title>indexhtml' > _site/index.html; echo '<!doctype html><title>README</title>readme' > _site/README.md
+                    echo '<!doctype html><title>t1</title>t1' > '_site/post/tag/Contax+645.html'
           echo '<!doctype html><title>t2</title>t2' > '_site/post/tag/Point+&+shoot.html'
           echo '<!doctype html><title>t3</title>t3' > '_site/post/tag/Point+and+shoot.html'
           echo '<!doctype html><title>mf</title>mf' > '_site/post/tag/Medium+format.html'
