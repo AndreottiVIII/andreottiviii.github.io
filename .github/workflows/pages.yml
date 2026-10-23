@@ -29,7 +29,7 @@ jobs:
           echo '<!doctype html><title>mf</title>mf' > '_site/post/tag/Medium+format.html'
           echo '<!doctype html><title>MF</title>MF' > '_site/post/tag/Medium+Format.html'
           echo '<!doctype html><title>p</title>portrait' > '_site/portrait-.html'
-          echo '<!doctype html><title>zzfile</title>zzfile' > _site/zzfile.html; echo '<!doctype html><title>zzdir</title>zzdir' > _site/zzfile/index.html 2>/dev/null; mkdir -p _site/qq; echo '<!doctype html><title>qqfile</title>qq' > _site/qq.html; echo '<!doctype html><title>qqdir</title>qq' > _site/qq/index.html
+          mkdir -p _site/qq; echo '<!doctype html><title>qqfile</title>qq' > _site/qq.html; echo '<!doctype html><title>qqdir</title>qq' > _site/qq/index.html
           echo '<!doctype html><title>zzidx</title>zzidx' > _site/zz/index.html
       - uses: actions/upload-pages-artifact@v3
         with:
