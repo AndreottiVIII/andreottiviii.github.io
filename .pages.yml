@@ -5,6 +5,7 @@ media:
   input: src/img
   output: /img
   extensions: [jpg, jpeg, png, webp]
+  rename: safe
 
 content:
   # ---------------- Articoli ----------------

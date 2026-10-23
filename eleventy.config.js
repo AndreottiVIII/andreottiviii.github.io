@@ -26,7 +26,11 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
 
   // ---------- Collezioni ----------
-  const byDate = (a, b) => b.date - a.date || a.inputPath.localeCompare(b.inputPath);
+  // piu' recente prima; a parita' di data l'articolo "copia" (duplicate_of) viene dopo l'originale
+  const byDate = (a, b) =>
+    b.date - a.date ||
+    (a.data.duplicate_of ? 1 : 0) - (b.data.duplicate_of ? 1 : 0) ||
+    a.inputPath.localeCompare(b.inputPath);
   eleventyConfig.addCollection("posts", (api) => api.getFilteredByGlob("src/posts/*.md").sort(byDate));
   eleventyConfig.addCollection("pageDocs", (api) => api.getFilteredByGlob("src/pages/*.md"));
 
@@ -130,7 +134,7 @@ module.exports = function (eleventyConfig) {
         .map((attrs) => {
           const src = (attrs.match(/src="([^"]+)"/) || [])[1];
           const alt = (attrs.match(/alt="([^"]*)"/) || [])[1] || "";
-          return `<a class="lb" href="${src}" data-alt="${alt}"><img ${attrs} sizes="(max-width: 700px) 50vw, 33vw"><span class="sr-only">View fullsize</span></a>`;
+          return `<a class="lb" href="${src}" data-alt="${alt}" aria-label="View fullsize"><img ${attrs} sizes="(max-width: 700px) 50vw, 33vw"></a>`;
         })
         .join("");
       return `<div class="gallery-grid" data-lightbox>${cells}</div>`;
