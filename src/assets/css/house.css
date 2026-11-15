@@ -506,3 +506,12 @@ body.lb-open { overflow: hidden; }
 .redir { margin-top: 20px; }
 .redir a { text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 600px) { .nf-body { flex-direction: column; } }
+
+/* aree di tocco: almeno 32 px */
+.hh nav a { min-height: 32px; justify-content: center; }
+.logo { padding: 3px 0; }
+.hf .links a { display: inline-block; padding: 7px 0; }
+.social { gap: 8px; }
+.social a { width: 32px; height: 32px; padding: 5px; }
+.entries .et { padding: 6px 0; }
+.reg .tt { padding: 6px 0; }
