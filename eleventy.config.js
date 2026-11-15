@@ -24,30 +24,27 @@ module.exports = async function (eleventyConfig) {
   // ---------- Markdown ----------
   const md = new MarkdownIt({ html: true, breaks: false, linkify: false });
   eleventyConfig.setLibrary("md", md);
-  eleventyConfig.addFilter("mdInline", (s) => (s ? md.renderInline(String(s)) : ""));
   eleventyConfig.addFilter("mdBlock", (s) => (s ? md.render(String(s)) : ""));
 
   // ---------- File copiati cosi' come sono ----------
   eleventyConfig.addPassthroughCopy({ "src/img": "img" });
   eleventyConfig.addPassthroughCopy({ "src/fonts": "fonts" });
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
-  eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
 
   // ---------- Collezioni ----------
-  // piu' recente prima; a parita' di data l'articolo "copia" (duplicate_of) viene dopo l'originale
-  const byDate = (a, b) =>
-    b.date - a.date ||
-    (a.data.duplicate_of ? 1 : 0) - (b.data.duplicate_of ? 1 : 0) ||
-    a.inputPath.localeCompare(b.inputPath);
-  eleventyConfig.addCollection("posts", (api) => api.getFilteredByGlob("src/posts/*.md").sort(byDate));
-  eleventyConfig.addCollection("pageDocs", (api) => api.getFilteredByGlob("src/pages/*.md"));
+  // piu' recente prima. L'articolo "copia" (duplicate_of: il doppio indirizzo del Seagull 4A) ha la sua pagina
+  // ma non entra negli elenchi (registro, etichette, categorie, feed, sitemap), come gia' nella casa e nell'Index.
+  const byDate = (a, b) => b.date - a.date || a.inputPath.localeCompare(b.inputPath);
+  const allPosts = (api) => api.getFilteredByGlob("src/posts/*.md").sort(byDate);
+  eleventyConfig.addCollection("posts", (api) => allPosts(api).filter((p) => !p.data.duplicate_of));
 
+  // etichette e categorie: i nomi vengono da tutti gli articoli (nessuna pagina vecchia sparisce), gli elenchi senza la copia
   const group = (api, key) => {
     const map = new Map();
-    for (const p of api.getFilteredByGlob("src/posts/*.md").sort(byDate)) {
+    for (const p of allPosts(api)) {
       for (const name of p.data[key] || []) {
         if (!map.has(name)) map.set(name, []);
-        map.get(name).push(p);
+        if (!p.data.duplicate_of) map.get(name).push(p);
       }
     }
     return [...map.entries()].map(([name, posts]) => ({ name, posts }));
@@ -100,7 +97,6 @@ module.exports = async function (eleventyConfig) {
   eleventyConfig.addFilter("tagFile", (n) => "/post/tag/" + n.replace(/ /g, "+") + ".html");
   eleventyConfig.addFilter("categoryFile", (n) => "/post/category/" + n.replace(/ /g, "+") + ".html");
 
-  eleventyConfig.addFilter("dateShort", (d) => `${d.getUTCMonth() + 1}/${d.getUTCDate()}/${pad(d.getUTCFullYear() % 100)}`);
   const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   eleventyConfig.addFilter("dateMD", (d) => `${MON[d.getUTCMonth()]} ${d.getUTCDate()}`);
@@ -136,17 +132,9 @@ module.exports = async function (eleventyConfig) {
   });
   eleventyConfig.addFilter("dateISO", (d) => d.toISOString().slice(0, 10));
   eleventyConfig.addFilter("dateRFC822", (d) => d.toUTCString());
-  eleventyConfig.addFilter("neighbour", (list, url, off) => {
-    const i = list.findIndex((p) => p.url === url);
-    return i < 0 ? null : list[i + off] || null;
-  });
   eleventyConfig.addFilter("findUrl", (list, url) => list.find((p) => p.url === url || p.page?.url === url));
-  eleventyConfig.addFilter("pageByKey", (list, key) => list.find((p) => p.fileSlug === key));
   eleventyConfig.addFilter("limit", (a, n) => a.slice(0, n));
-  eleventyConfig.addFilter("notDuplicate", (a) => a.filter((p) => !p.data.duplicate_of));
   eleventyConfig.addFilter("absUrl", (p, base) => (p === "/" ? base : base + p));
-  eleventyConfig.addFilter("imgPath", (p) => p);
-  eleventyConfig.addFilter("jsonStr", (s) => JSON.stringify(s));
   eleventyConfig.addFilter("xmlEscape", (s) =>
     String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
   );

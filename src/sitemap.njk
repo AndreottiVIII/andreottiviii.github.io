@@ -10,7 +10,7 @@ eleventyExcludeFromCollections: true
   {%- for f in floors %}
   <url><loc>{{ origin }}{{ f.url }}</loc></url>
   {%- endfor %}
-  {%- for p in collections.posts | notDuplicate %}
+  {%- for p in collections.posts %}
   <url><loc>{{ origin }}{{ p.url | cleanUrl }}</loc><lastmod>{{ p.date | dateISO }}</lastmod></url>
   {%- endfor %}
   {%- for c in collections.categoryList %}
