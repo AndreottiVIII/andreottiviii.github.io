@@ -126,7 +126,7 @@ module.exports = async function (eleventyConfig) {
     if (letters && letters.url) {
       const entries = [{ n: ++n, title: letters.label + " (Substack)", url: letters.url, ext: true, lang: "", year: "" }];
       for (const a of letters.also || []) entries.push({ n: ++n, title: a.label, url: a.url, ext: true, lang: a.lang || "", year: "" });
-      sections.push({ key: "letters", name: letters.label, room: "Dovecote", url: letters.url, ext: true, entries });
+      sections.push({ key: "letters", name: letters.label, room: "Dovecote", url: letters.page || letters.url, ext: !letters.page, entries });
     }
     return { sections, total: n };
   });

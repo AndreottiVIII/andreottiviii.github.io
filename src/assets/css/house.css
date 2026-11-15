@@ -379,6 +379,7 @@ img.broken { display: none; }
   .hh:not(.is-home) nav a span { font-size: 9px; }
   .stairs { display: grid; grid-template-columns: 1fr 1fr; row-gap: 4px; }
   .stairs a { max-width: none; }
+  .stairs .down { grid-column: 2; }
   .stairs .whole { grid-column: 1 / -1; grid-row: 2; text-align: center; border-top: 1px dashed var(--dash); padding-top: 12px; }
 }
 
