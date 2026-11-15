@@ -5,7 +5,7 @@ date: '2022-01-13'
 labels: []
 author: Davide Caniatti
 cover: /img/dscf5524.jpg
-excerpt: <pre><code class="language-markdown">When I bought a Contax 80mm, I immediately thought of using it mainly on my new Fujifilm GFX 50R. Unfortunately, the Contax system has been dead for more than 15 years, so there are no official adapters. Therefore, it is necessary to resort to third-party adapters, with all the ensuing uncertainties.</code></pre>
+excerpt: When I bought a Contax 80mm, I immediately thought of using it mainly on my new Fujifilm GFX 50R. Unfortunately, the Contax system has been dead for more than 15 years, so there are no official adapters. Therefore, it is necessary to resort to third-party adapters, with all the ensuing uncertainties.
 permalink: /post/contax-645-80mm-planar-f2-on-gfx-with-fringer-adapter.html
 floor: workshop
 image: /img/house-g-contax645fringer.jpg
