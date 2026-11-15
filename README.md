@@ -9,7 +9,7 @@ Sito di Davide Caniatti. Generato con [Eleventy](https://www.11ty.dev/), pubblic
 | Articoli | `src/posts/*.md` (Markdown + frontmatter) |
 | Gallerie del portfolio | `src/galleries/*.md` (la lista `gallery:` nel frontmatter) |
 | Home, About me, Index | `src/pages/` |
-| Foto (2500 px di lato lungo) | `src/img/` (le versioni piccole si generano da sole alla pubblicazione) |
+| Foto (2500 px di lato lungo) | `src/img/` (le versioni piccole si generano da sole alla pubblicazione; una foto oltre 2 MB viene pubblicata ridotta a 2500 px, l'originale resta) |
 | Impostazioni (menu, social, **modalità prova**) | `src/_data/site.json` |
 | Grafica (un solo vestito: la casa) | `src/assets/css/house.css`, `src/assets/js/site.js` e `house.js`, `src/_includes/` |
 | Pannello per scrivere | `.pages.yml` ([Pages CMS](https://pagescms.org)) |
@@ -37,8 +37,8 @@ Due repo, **un solo codice** (stessa storia git):
 
 | | Repo | Indirizzo | Per cosa |
 |---|---|---|---|
-| **laboratorio** | `AndreottiVIII/lab` (cartella `lab/`) | https://andreottiviii.github.io/lab/ | dove si prova: sempre `noindex`, senza Analytics, con l'etichetta "LAB" in alto |
-| **sito** | `AndreottiVIII/andreottiviii.github.io` (cartella `site/`) | https://andreottiviii.github.io | la copia 1:1 pronta per il cambio di dominio: riceve solo ciò che è approvato |
+| **laboratorio** | `AndreottiVIII/lab` (cartella `lab/`) | https://davidecaniatti.com/lab/ | dove si prova: sempre `noindex`, senza Analytics, con l'etichetta "LAB" in alto |
+| **sito** | `AndreottiVIII/andreottiviii.github.io` (cartella `site/`) | https://davidecaniatti.com | il sito vero: riceve solo ciò che è approvato |
 
 Le differenze non stanno nel codice ma nella pubblicazione: il workflow legge le *variabili del repo* `PATH_PREFIX` e `MOCKUP` (Settings > Secrets and variables > Actions > Variables).
 Sul sito sono vuote: indirizzi alla radice e `mockup` come in `src/_data/site.json`. Nel laboratorio sono `/lab/` e `true`: Eleventy mette il prefisso a link, immagini, CSS, JS, sitemap e feed, e la modalità prova è sempre accesa. La logica sta in `src/_data/build.js` e in fondo a `eleventy.config.js`.
@@ -80,7 +80,7 @@ Si guarda il laboratorio. Per il sito il controllo è automatico: la rete di sic
 
 ## Rete di sicurezza
 
-Dopo la build, il workflow lancia `node scripts/check-urls.mjs`. Lo script ha dentro l'elenco fisso dei 142 indirizzi della sitemap di Squarespace, più `/work` e la home, e verifica che in `_site` esista il file che GitHub Pages servirà per ognuno. Controlla anche che `<title>` e meta description non siano vuoti (la description può mancare solo dove mancava già sul vecchio sito: tag, categorie e 4 articoli). Blocca anche qualunque file oltre 2 MB (Google legge solo i primi 2 MB di una pagina) e, sul sito vero, qualunque pagina vecchia con `noindex`. Se manca anche un solo indirizzo il lavoro fallisce **prima** del deploy e il sito online resta com'era.
+Dopo la build, il workflow lancia `node scripts/check-urls.mjs`. Lo script ha dentro l'elenco fisso dei 142 indirizzi della sitemap di Squarespace, più `/work` e la home, e verifica che in `_site` esista il file che GitHub Pages servirà per ognuno. Controlla anche che `<title>` e meta description non siano vuoti (la description può mancare solo dove mancava già sul vecchio sito: tag, categorie e 4 articoli). Blocca anche qualunque file oltre 2 MB (Google legge solo i primi 2 MB di una pagina) e, sul sito vero, qualunque pagina vecchia con `noindex` o con il canonical fuori da davidecaniatti.com, un robots.txt che blocca il sito o non indica la sitemap, una sitemap o un feed con indirizzi fuori dal sito vero. Se manca anche un solo indirizzo il lavoro fallisce **prima** del deploy e il sito online resta com'era.
 
 In locale, dopo `npx eleventy`: `node scripts/check-urls.mjs`. Su Windows segnala `/post/tag/Medium+format`, perché lì i due tag che differiscono solo per le maiuscole si sovrappongono: su GitHub Actions (Linux) non succede e fa fede quello.
 
@@ -95,7 +95,7 @@ La home `/` è una **sezione di casa** disegnata dai dati; `/projects`, `/writin
 | Projects | serra | i file di `src/projects/*.md` (uno per progetto: titolo, riga di descrizione, indirizzo, lingua, foto) |
 | Writing | studiolo | gli articoli con `floor: writing` (o senza `floor`) |
 | Workshop | officina | gli articoli con `floor: workshop` |
-| Photography | camera oscura | le gallerie (`src/galleries`) |
+| Photography | camera oscura | le gallerie (`src/galleries`): i cassetti e la sitemap le prendono da qui, nello stesso ordine |
 
 Campi in più nel frontmatter di articoli, gallerie e progetti (tutti facoltativi):
 
