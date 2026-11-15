@@ -488,8 +488,9 @@ body.lb-open { overflow: hidden; }
 }
 
 /* ---------- About ---------- */
+.sheetpost.about { grid-template-columns: 230px minmax(0, 980px); }
 .about .page-sheet { min-width: 0; }
-.about-grid { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 36px; align-items: start; margin-top: 8px; }
+.about-grid { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 36px; align-items: start; margin-top: 8px; }
 .about-grid .page-image img { width: 100%; height: auto; border: 1px solid var(--ink); }
 .about .pb { font-size: 17px; }
 .about .pb h1 { font-size: clamp(40px, 5vw, 68px); }
