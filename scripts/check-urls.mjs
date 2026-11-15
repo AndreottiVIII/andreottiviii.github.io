@@ -363,6 +363,8 @@ if (IS_LAB) {
   for (const f of htmlFiles) {
     const h = read(f);
     const rel = path.relative(SITE_DIR, f);
+    // le bozze da far vedere a Davide usano <base> verso il sito pubblico: niente controllo del prefisso
+    if (rel.split(path.sep).join("/").startsWith("assets/bozze/")) { if (!/noindex/.test(h)) fail(`LAB ${rel}: manca noindex`); continue; }
     if (!/<meta name="robots" content="noindex, nofollow">/.test(h)) fail(`LAB ${rel}: manca noindex`);
     if (/googletagmanager|G-[A-Z0-9]{8,}/.test(h)) fail(`LAB ${rel}: compare Analytics`);
     const locali = [];
