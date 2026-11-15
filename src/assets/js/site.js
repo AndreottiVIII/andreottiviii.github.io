@@ -13,7 +13,7 @@
   });
 
   /* ---- lightbox a schermo intero ---- */
-  var box, boxImg, boxCount, list = [], idx = 0, touchX = null;
+  var box, boxImg, boxCount, list = [], idx = 0, touchX = null, opener = null;
   function build() {
     box = document.createElement('div');
     box.className = 'lightbox';
@@ -41,10 +41,15 @@
   }
   function open(links, i) {
     if (!box) build();
+    opener = document.activeElement;
     list = links; box.classList.add('open'); document.body.classList.add('lb-open');
     show(i); $('.lb-close', box).focus();
   }
-  function close() { box.classList.remove('open'); document.body.classList.remove('lb-open'); boxImg.src = ''; }
+  function close() {
+    box.classList.remove('open'); document.body.classList.remove('lb-open'); boxImg.removeAttribute('src');
+    /* la tastiera torna sulla foto da cui si era partiti */
+    if (opener && opener.focus) opener.focus();
+  }
   $$('[data-lightbox]').forEach(function (g) {
     var links = $$('a.lb', g);
     links.forEach(function (a, i) {
