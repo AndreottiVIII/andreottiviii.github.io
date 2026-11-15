@@ -127,6 +127,7 @@ main { display: block; }
 .cookie-banner { position: fixed; left: 0; right: 0; bottom: 0; z-index: 90; background: var(--paper); border-top: 1.5px solid var(--ink); padding: 14px var(--g); display: flex; gap: 20px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
 .cookie-banner[hidden] { display: none; }
 .cookie-banner p { font-size: 14px; line-height: 1.5; max-width: 60ch; }
+.cookie-banner p .cookie-it { display: block; color: var(--mute); }
 .cookie-actions { display: flex; gap: 10px; }
 .cookie-actions button { font: 500 14px Jost, sans-serif; min-width: 110px; padding: 10px 18px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); cursor: pointer; }
 .cookie-actions button:hover { background: var(--ink); color: var(--paper); }

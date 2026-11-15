@@ -39,7 +39,7 @@ eleventyComputed:
   {%- endif %}
   <nav class="stairs" aria-label="Other floors">
     {%- if i > 0 %}<a class="up" href="{{ floors[i - 1].url }}">↑ {{ floors[i - 1].name }}</a>{% endif %}
-    <a class="house" href="/">The whole house</a>
+    <a class="whole" href="/">The whole house</a>
     {%- if i < floors.length - 1 %}<a class="down" href="{{ floors[i + 1].url }}">↓ {{ floors[i + 1].name }}</a>{% endif %}
   </nav>
 </div>
