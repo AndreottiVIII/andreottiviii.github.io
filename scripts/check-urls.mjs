@@ -384,6 +384,24 @@ if (IS_LAB) {
   console.log(`Laboratorio (${prefix}): ${htmlFiles.length} pagine HTML controllate per noindex, Analytics e prefisso nei link`);
 }
 
+// Nessun file oltre 2 MB: Google legge solo i primi 2 MB di una pagina (Seconda Repubblica e' sparita cosi', 22/10/2026)
+const MAX_BYTES = 2 * 1024 * 1024;
+(function walk(d) {
+  for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+    const f = path.join(d, e.name);
+    if (e.isDirectory()) walk(f);
+    else if (fs.statSync(f).size > MAX_BYTES) fail(`PESANTE ${path.relative(SITE_DIR, f)}: ${(fs.statSync(f).size / 1048576).toFixed(2)} MB, oltre il limite di 2 MB`);
+  }
+})(SITE_DIR);
+
+// Sul sito vero (non nel laboratorio, non in modalita' prova) nessuna delle pagine vecchie deve avere noindex
+if (!IS_LAB && !/^true$/i.test(String(process.env.MOCKUP || "").trim())) {
+  for (const u of all) {
+    const file = resolveLikePages(u);
+    if (file && /<meta name="robots" content="[^"]*noindex/i.test(read(file))) fail(`NOINDEX ${u}: la pagina chiede a Google di non indicizzarla`);
+  }
+}
+
 if (errors.length) {
   console.error(`\nRETE DI SICUREZZA: ${errors.length} problema/i`);
   for (const e of errors) console.error("  - " + e);

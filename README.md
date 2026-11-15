@@ -80,7 +80,7 @@ Si guarda il laboratorio. Per il sito il controllo è automatico: la rete di sic
 
 ## Rete di sicurezza
 
-Dopo la build, il workflow lancia `node scripts/check-urls.mjs`. Lo script ha dentro l'elenco fisso dei 142 indirizzi della sitemap di Squarespace, più `/work` e la home, e verifica che in `_site` esista il file che GitHub Pages servirà per ognuno. Controlla anche che `<title>` e meta description non siano vuoti (la description può mancare solo dove mancava già sul vecchio sito: tag, categorie e 4 articoli). Se manca anche un solo indirizzo il lavoro fallisce **prima** del deploy e il sito online resta com'era.
+Dopo la build, il workflow lancia `node scripts/check-urls.mjs`. Lo script ha dentro l'elenco fisso dei 142 indirizzi della sitemap di Squarespace, più `/work` e la home, e verifica che in `_site` esista il file che GitHub Pages servirà per ognuno. Controlla anche che `<title>` e meta description non siano vuoti (la description può mancare solo dove mancava già sul vecchio sito: tag, categorie e 4 articoli). Blocca anche qualunque file oltre 2 MB (Google legge solo i primi 2 MB di una pagina) e, sul sito vero, qualunque pagina vecchia con `noindex`. Se manca anche un solo indirizzo il lavoro fallisce **prima** del deploy e il sito online resta com'era.
 
 In locale, dopo `npx eleventy`: `node scripts/check-urls.mjs`. Su Windows segnala `/post/tag/Medium+format`, perché lì i due tag che differiscono solo per le maiuscole si sovrappongono: su GitHub Actions (Linux) non succede e fa fede quello.
 
