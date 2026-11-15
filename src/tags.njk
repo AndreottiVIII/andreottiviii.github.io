@@ -10,8 +10,14 @@ eleventyComputed:
   headTitle: "{{ tag.name | safe }} — Blog — Davide Caniatti"
   canonical: "{{ tag.name | tagUrl }}"
 ---
-<div class="archive">
-<h1 class="archive-title" data-kind="Tag" data-title="{{ tag.name }}" aria-label="{{ tag.name }}"></h1>
-{% set items = tag.posts %}
-{% include "post-list.njk" %}
+{%- set kind = 'tag' -%}
+{%- set activeName = tag.name -%}
+{%- set items = tag.posts -%}
+{%- set firstNo = items.length -%}
+{% include "register.njk" %}
+  <nav class="stairs" aria-label="Other pages">
+    <a class="up" href="/post"><span class="lbl">↑ up</span>Blog</a>
+    <a class="whole" href="/">The whole house</a>
+    <a class="down" href="/writing"><span class="lbl">↓ down</span>Writing</a>
+  </nav>
 </div>

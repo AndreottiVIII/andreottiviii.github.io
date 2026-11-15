@@ -99,8 +99,39 @@ module.exports = async function (eleventyConfig) {
   eleventyConfig.addFilter("categoryFile", (n) => "/post/category/" + n.replace(/ /g, "+") + ".html");
 
   eleventyConfig.addFilter("dateShort", (d) => `${d.getUTCMonth() + 1}/${d.getUTCDate()}/${pad(d.getUTCFullYear() % 100)}`);
+  const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   eleventyConfig.addFilter("dateMD", (d) => `${MON[d.getUTCMonth()]} ${d.getUTCDate()}`);
+  eleventyConfig.addFilter("dateDots", (d) => `${pad(d.getUTCDate())}.${pad(d.getUTCMonth() + 1)}.${d.getUTCFullYear()}`);
+  eleventyConfig.addFilter("dateLong", (d) => `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`);
+  eleventyConfig.addFilter("urlIndex", (list, url) => Math.max(0, list.findIndex((x) => x.url === url)));
+  eleventyConfig.addFilter("countFloor", (list, key) => list.filter((p) => (p.data.floor || "writing") === key).length);
+  eleventyConfig.addFilter("pad2", (n) => pad(n));
+  // vero se la foto esiste in src/ (le foto perse su Squarespace non ci sono: al loro posto il riquadro tratteggiato)
+  eleventyConfig.addFilter("hasImg", (p) => !!p && (/^https?:/.test(p) || fs.existsSync(path.join(SRC_IMG, "..", String(p)))));
+  // posizione di un articolo dentro il suo piano (dal piu' recente): {i, n, newer, older}
+  eleventyConfig.addFilter("sheetIn", (F, url) => {
+    const items = (F && F.items) || [];
+    const i = items.findIndex((x) => x.url === url);
+    return { i, n: items.length, newer: i > 0 ? items[i - 1] : null, older: i >= 0 ? items[i + 1] || null : null };
+  });
+  // l'Index: tutti i contenuti della casa, piano per piano, in ordine alfabetico dentro il piano, numerati di seguito
+  eleventyConfig.addFilter("catalog", (H, letters) => {
+    let n = 0;
+    const sections = H.floors.map((f) => {
+      const entries = f.items
+        .slice()
+        .sort((a, b) => a.title.localeCompare(b.title, "en", { sensitivity: "base", ignorePunctuation: true }))
+        .map((it) => ({ n: ++n, title: it.title, url: it.url, ext: it.ext, lang: it.lang, year: it.date ? it.date.getUTCFullYear() : "" }));
+      return { key: f.key, name: f.name, room: f.room, url: f.url, entries };
+    });
+    if (letters && letters.url) {
+      const entries = [{ n: ++n, title: letters.label + " (Substack)", url: letters.url, ext: true, lang: "", year: "" }];
+      for (const a of letters.also || []) entries.push({ n: ++n, title: a.label, url: a.url, ext: true, lang: a.lang || "", year: "" });
+      sections.push({ key: "letters", name: letters.label, room: "Dovecote", url: letters.url, ext: true, entries });
+    }
+    return { sections, total: n };
+  });
   eleventyConfig.addFilter("dateISO", (d) => d.toISOString().slice(0, 10));
   eleventyConfig.addFilter("dateRFC822", (d) => d.toUTCString());
   eleventyConfig.addFilter("neighbour", (list, url, off) => {
@@ -206,7 +237,9 @@ module.exports = async function (eleventyConfig) {
 
     // 5) link esterni in una nuova scheda
     content = content.replace(/<a href="(https?:\/\/[^"]+)"([^>]*)>/g, (m, href, rest) => {
-      if (/davidecaniatti\.com|andreottiviii\.github\.io/.test(href) || /target=/.test(rest)) return m;
+      // pagine del sito stesso: stessa scheda. I progetti (Lexodus, Grand Strategy...) si aprono sempre in una scheda nuova.
+      const own = /^https?:\/\/(www\.)?(davidecaniatti\.com|andreottiviii\.github\.io)(\/|$)/.test(href) && !/\/(lexodus|grand-strategy)(\/|$)/.test(href);
+      if (own || /target=/.test(rest)) return m;
       return `<a href="${href}" target="_blank" rel="noopener"${rest}>`;
     });
     return content;

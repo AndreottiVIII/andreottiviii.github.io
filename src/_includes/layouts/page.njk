@@ -1,11 +1,30 @@
 ---
 layout: layouts/base.njk
 ---
-<div class="page page-split">
-  {%- if image %}
-  <figure class="page-image"><img src="{{ image }}" alt="{{ image_alt }}" sizes="(max-width: 800px) 100vw, 50vw" loading="eager"></figure>
-  {%- endif %}
-  <div class="page-text">
+{%- set mhFloor = "none" -%}
+<div class="wrap">
+  <div class="sheetpost about">
+    <aside class="cart" aria-label="About this sheet">
+      <div><span class="k">place</span><span class="v">Milan</span></div>
+      <div><span class="k">studied</span><span class="v">Bocconi · IED</span></div>
+      <div><span class="k">elsewhere</span>
+        <ul class="social">
+          {%- for s in site.social %}
+          <li><a href="{{ s.href }}" target="_blank" rel="noopener" aria-label="{{ s.label }}">{% include "icons/" + s.icon + ".svg" %}</a></li>
+          {%- endfor %}
+        </ul>
+      </div>
+    </aside>
+    <article class="page-sheet">
+      <div class="title mono"><span>SHEET · ABOUT</span><span>BIO</span></div>
+      <div class="about-grid">
+        {%- if image %}
+        <figure class="page-image"><img src="{{ image }}" alt="{{ image_alt }}" sizes="(max-width: 900px) 100vw, 420px" loading="eager"></figure>
+        {%- endif %}
+        <div class="pb page-text">
 {{ content | safe }}
+        </div>
+      </div>
+    </article>
   </div>
 </div>

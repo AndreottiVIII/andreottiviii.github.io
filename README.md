@@ -11,7 +11,7 @@ Sito di Davide Caniatti. Generato con [Eleventy](https://www.11ty.dev/), pubblic
 | Home, About me, Index | `src/pages/` |
 | Foto (2500 px di lato lungo) | `src/img/` (le versioni piccole si generano da sole alla pubblicazione) |
 | Impostazioni (menu, social, **modalità prova**) | `src/_data/site.json` |
-| Grafica | `src/assets/css/site.css`, `src/assets/js/site.js`, `src/_includes/` |
+| Grafica (un solo vestito: la casa) | `src/assets/css/house.css`, `src/assets/js/site.js` e `house.js`, `src/_includes/` |
 | Pannello per scrivere | `.pages.yml` ([Pages CMS](https://pagescms.org)) |
 
 Gli indirizzi sono decisi dal campo `permalink` di ogni file: GitHub Pages serve `percorso/nome.html` all'indirizzo `/percorso/nome`, senza `.html`. Gli indirizzi già pubblicati non si cambiano.

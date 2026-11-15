@@ -37,6 +37,9 @@ eleventyComputed:
   {%- else %}
   <p class="empty">Nothing here yet.</p>
   {%- endif %}
+  {%- if floor.key == 'writing' or floor.key == 'workshop' %}
+  <p class="allsheets"><a href="/post">All sheets →</a><span class="mono">the register of every sheet in the study and the workshop</span></p>
+  {%- endif %}
   <nav class="stairs" aria-label="Other floors">
     {%- if i > 0 %}<a class="up" href="{{ floors[i - 1].url }}">↑ {{ floors[i - 1].name }}</a>{% endif %}
     <a class="whole" href="/">The whole house</a>

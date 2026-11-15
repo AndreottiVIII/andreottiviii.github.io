@@ -1,0 +1,35 @@
+{#- Il registro delle tavole: elenco compatto di articoli. Variabili: items, firstNo (numero della prima riga, scende), kind (all|tag|category), activeName -#}
+{%- set H = collections.house -%}
+<div class="wrap arc">
+  <div class="title mono"><span>REGISTER OF SHEETS · STUDY + WORKSHOP</span><span>{{ collections.posts.length }} SHEETS</span></div>
+  <header class="fl-head">
+    <div class="h"><b>Register</b></div>
+    {%- if kind == 'all' %}
+    <h1>Blog</h1>
+    <p class="blurb">{{ site.blog_description }}</p>
+    {%- else %}
+    <h1><small class="mono">{{ 'TAG' if kind == 'tag' else 'CATEGORY' }}</small>{{ activeName }}</h1>
+    {%- endif %}
+    <div class="filters" role="navigation" aria-label="Filters">
+      <a{% if kind == 'all' %} class="on" aria-current="page"{% endif %} href="/post">ALL · {{ collections.posts.length }}</a>
+      <a href="/writing">STUDY · {{ collections.posts | countFloor('writing') }}</a>
+      <a href="/workshop">WORKSHOP · {{ collections.posts | countFloor('workshop') }}</a>
+      {%- for c in collections.categoryList %}
+      <a{% if kind == 'category' and c.name == activeName %} class="on" aria-current="page"{% endif %} href="{{ c.name | categoryUrl }}">{{ c.name | upper }}</a>
+      {%- endfor %}
+      {%- if kind == 'tag' %}<a class="on" aria-current="page" href="{{ activeName | tagUrl }}">TAG · {{ activeName }}</a>{% endif %}
+    </div>
+  </header>
+  <div class="reg-head" aria-hidden="true"><span>NO.</span><span></span><span>TITLE</span><span>DATE</span><span>ROOM</span></div>
+  <ol class="reg">
+    {%- for p in items %}
+    {%- set fk = p.data.floor or 'writing' %}
+    <li>
+      <span class="no" aria-hidden="true">{{ firstNo - loop.index0 }}</span>
+      <a class="th" href="{{ p.url | cleanUrl }}" tabindex="-1" aria-hidden="true">{% if p.data.cover | hasImg %}<img src="{{ p.data.cover }}" alt="" sizes="96px" loading="lazy">{% else %}<span class="blank"></span>{% endif %}</a>
+      <a class="tt" href="{{ p.url | cleanUrl }}">{{ p.data.title }}</a>
+      <time class="dt" datetime="{{ p.date | dateISO }}">{{ p.date | dateDots }}</time>
+      <a class="rm" href="{{ H.byKey[fk].url }}">{{ H.byKey[fk].room | upper }}</a>
+    </li>
+    {%- endfor %}
+  </ol>

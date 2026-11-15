@@ -286,3 +286,222 @@ main { display: block; }
   .hh.is-home nav { gap: 18px; }
 }
 @media (hover: none) { .lt-card { display: none; } }
+
+/* =====================================================================================================
+   Il resto del sito nello stesso vestito: articoli, gallerie, registro, Index, About, 404.
+   ===================================================================================================== */
+img.broken { display: none; }
+.mh { width: 22px; height: 36px; display: block; flex: none; }
+.plates { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; }
+.plates a { display: inline-block; font: 400 11px/1 "Overpass Mono", monospace; letter-spacing: .04em; border: 1px solid var(--ink); padding: 8px 8px; min-height: 32px; white-space: nowrap; }
+.plates a:hover { background: var(--ink); color: var(--paper); }
+.stairs .lbl { display: block; font: 400 11px "Overpass Mono", monospace; letter-spacing: .08em; color: var(--mute); text-transform: uppercase; }
+.stairs a { max-width: 40%; }
+.stairs .down { text-align: right; }
+.stairs .whole { align-self: center; }
+.allsheets { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; border-top: 1px dashed var(--dash); margin-top: 34px; padding-top: 14px; }
+.allsheets a { font-weight: 500; padding: 8px 0; }
+.allsheets a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.allsheets span { font-size: 11px; color: var(--mute); }
+
+/* la libreria dello studio nel disegno e' un link all'Index */
+.idx-hit:hover, .idx-hit:focus-visible { outline: 1.5px solid var(--ink); overflow: visible; }
+.draw-wrap:has(.idx-hit:hover) .idx-plate, .fwrap:has(.idx-hit:hover) .idx-plate { background: var(--ink); color: var(--paper); }
+
+/* ---------- articolo: la tavola con il cartiglio ---------- */
+.sheetpost { display: grid; grid-template-columns: 230px minmax(0, 700px); gap: 64px; padding-top: 26px; justify-content: start; }
+.cart { position: sticky; top: 20px; align-self: start; border: 1.5px solid var(--ink); font-size: 13px; }
+.cart > div, .cart > a { display: block; padding: 9px 11px; border-bottom: 1px solid var(--ink); }
+.cart > :last-child { border-bottom: 0; }
+.cart .k { display: block; font: 400 10.5px "Overpass Mono", monospace; letter-spacing: .1em; color: var(--mute); text-transform: uppercase; margin-bottom: 3px; }
+.cart .room { display: flex; gap: 10px; align-items: center; }
+.cart .room b { font-weight: 600; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; }
+.cart a.back:hover { background: var(--ink); color: var(--paper); }
+.cart a.back:hover .k { color: var(--paper); }
+.cart .v { font-weight: 500; }
+.cart .social { justify-content: flex-start; gap: 10px; margin-top: 6px; }
+.cart .social a { width: 32px; height: 32px; padding: 5px; }
+.ttl { font-weight: 500; font-size: clamp(40px, 5vw, 68px); line-height: 1.02; margin: 6px 0 26px; letter-spacing: -.005em; overflow-wrap: break-word; }
+.pb { font-size: 18px; line-height: 1.62; font-weight: 400; min-width: 0; overflow-wrap: break-word; }
+.pb p { margin: 0 0 1.15em; }
+.pb a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.pb h1 { font-weight: 500; font-size: clamp(36px, 4vw, 52px); line-height: 1.05; margin: 0 0 .6em; }
+.pb h2, .pb h3 { font-weight: 300; font-size: 26px; line-height: 1.25; margin: 0 0 1em; }
+.pb h2:not(:first-child), .pb h3:not(:first-child) { font-weight: 500; font-size: 22px; margin-top: 1.6em; }
+.pb h4 { font-weight: 500; font-size: 18px; margin: 1.4em 0 .5em; }
+.pb ul, .pb ol { margin: 0 0 1.15em 1.3em; }
+.pb li { margin-bottom: .3em; }
+.pb { counter-reset: fig; }
+.pb figure.photo { margin: 30px 0; counter-increment: fig; }
+.pb figure.photo img { width: 100%; height: auto; border: 1px solid var(--ink); }
+.pb figure.photo a { display: block; text-decoration: none; }
+.pb figcaption { font: 400 11.5px/1.5 "Overpass Mono", monospace; color: var(--mute); margin-top: 8px; }
+.pb figure.photo figcaption::before { content: "FIG. " counter(fig) " — "; color: var(--ink); }
+.pb figure.photo:not(:has(figcaption))::after { content: "FIG. " counter(fig); display: block; font: 400 11.5px "Overpass Mono", monospace; color: var(--mute); margin-top: 6px; }
+.pb blockquote { margin: 0 0 1.6em; padding-left: 14px; border-left: 1.5px solid var(--ink); font-style: italic; font-weight: 300; }
+.pb blockquote p { margin: 0; }
+.pb img { max-width: 100%; height: auto; }
+.pb pre, .pb code { font-family: "Overpass Mono", monospace; font-size: .85em; }
+.pb pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.pb table { max-width: 100%; display: block; overflow-x: auto; }
+.pb iframe, .pb video { max-width: 100%; }
+.pb .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 30px 0; }
+.pb .gallery-grid .lb { display: block; aspect-ratio: 1; overflow: hidden; border: 1px solid var(--ink); cursor: zoom-in; text-decoration: none; }
+.pb .gallery-grid img { width: 100%; height: 100%; object-fit: cover; border: 0; }
+.endtags { border-top: 1.5px solid var(--ink); margin-top: 40px; padding-top: 12px; display: none; }
+.endtags .k { font: 400 11px "Overpass Mono", monospace; letter-spacing: .1em; color: var(--mute); margin: 8px 0; }
+.ph-meta { display: none; border-top: 1.5px solid var(--ink); border-bottom: 1px solid var(--ink); margin: 0 0 22px; padding: 8px 0; font: 400 11px "Overpass Mono", monospace; letter-spacing: .06em; color: var(--mute); }
+.ph-top { display: none; }
+.post .stairs { margin-top: 36px; }
+@media (max-width: 900px) {
+  .sheetpost { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .cart { display: none; }
+  .about .cart { display: block; position: static; margin-top: 26px; order: 2; }
+  .ph-meta { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+  .endtags { display: block; }
+  .ph-top { display: flex; align-items: center; gap: 10px; padding-top: 16px; }
+  .ph-top b { font-weight: 600; font-size: 12px; letter-spacing: .16em; }
+  .ph-top a { margin-left: auto; font: 600 12px Jost, sans-serif; letter-spacing: .08em; text-transform: uppercase; padding: 8px 0 8px 8px; }
+}
+@media (max-width: 600px) {
+  .ttl { font-size: 36px; margin-bottom: 16px; }
+  .pb { font-size: 17px; }
+  .pb h3 { font-size: 22px; }
+  .pb .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* testata sul telefono: "About" sale sulla riga del nome, i piani restano su una riga */
+@media (max-width: 600px) {
+  .hh:not(.is-home) nav { flex-wrap: nowrap; gap: 4px; }
+  .hh:not(.is-home) nav a.k-about { position: absolute; right: 0; top: 24px; align-items: flex-end; }
+  .hh:not(.is-home) nav a { font-size: 13px; }
+  .hh:not(.is-home) nav a span { font-size: 9px; }
+  .stairs { display: grid; grid-template-columns: 1fr 1fr; row-gap: 4px; }
+  .stairs a { max-width: none; }
+  .stairs .whole { grid-column: 1 / -1; grid-row: 2; text-align: center; border-top: 1px dashed var(--dash); padding-top: 12px; }
+}
+
+/* ---------- gallerie: il cassetto della camera oscura (tutta la pagina e' scura) ---------- */
+.gal { padding-top: 26px; }
+.gal .fl-head { background: var(--dark); color: #f1d9d2; border-top-color: #f1d9d2; padding: 14px 0 22px; }
+.gal .fl-head .h a { font: 400 11px "Overpass Mono", monospace; color: #d9705e; padding: 8px 0; }
+.gal .fl-head .h a:hover { color: #f1d9d2; }
+.gal .fl-head .count { color: #d9705e; }
+.gal .fl-head h1 { font-size: clamp(44px, 7vw, 84px); }
+.gal .title { color: #d9705e; }
+.prints { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 26px 22px; align-items: start; margin-top: 22px; }
+.prints > a { display: block; position: relative; cursor: zoom-in; }
+.prints img { width: 100%; height: auto; display: block; border: 1px solid #5a2a22; }
+.prints .pn { display: flex; gap: 8px; align-items: center; padding-top: 7px; font: 400 11px "Overpass Mono", monospace; color: #d9705e; }
+.prints .pn i { width: 20px; height: 20px; border: 1px solid #f1d9d2; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 9.5px; color: #f1d9d2; }
+.prints > a:hover img, .prints > a:focus-visible img { border-color: #f1d9d2; }
+.others { border-top: 1.5px solid #f1d9d2; margin-top: 34px; padding-top: 12px; }
+.others .k { font: 400 11px "Overpass Mono", monospace; letter-spacing: .1em; color: #d9705e; margin-bottom: 8px; }
+.others ol { list-style: none; display: flex; gap: 8px; flex-wrap: wrap; }
+.others li a { display: flex; gap: 8px; align-items: center; border: 1px solid #f1d9d2; color: #f1d9d2; padding: 6px 10px 6px 6px; min-height: 36px; font-weight: 500; }
+.others li a i { width: 20px; height: 20px; border: 1px solid currentColor; border-radius: 50%; display: grid; place-items: center; font: 400 9.5px "Overpass Mono", monospace; font-style: normal; }
+.others li a[aria-current] { background: #f1d9d2; color: var(--dark); }
+.others li a:hover { background: #f1d9d2; color: var(--dark); }
+.dark-room main { background: var(--dark); color: #f1d9d2; padding-bottom: 40px; }
+.dark-room .gal .stairs { border-top-color: #f1d9d2; }
+.dark-room .gal .stairs .lbl { color: #d9705e; }
+.dark-room .gal :focus-visible { outline-color: #f1d9d2; }
+.dark-room .hf { margin-top: 0; }
+@media (max-width: 600px) { .prints { grid-template-columns: 1fr 1fr; gap: 14px 10px; } .prints .pn { font-size: 10px; } .prints .pn span { display: none; } }
+
+/* ---------- lightbox a schermo intero ---------- */
+.lightbox { position: fixed; inset: 0; z-index: 200; background: rgba(20, 8, 7, .97); display: none; align-items: center; justify-content: center; }
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 94vw; max-height: 86vh; width: auto; height: auto; object-fit: contain; }
+.lightbox button { position: absolute; background: none; border: 1px solid #f1d9d2; color: #f1d9d2; font: 400 24px/1 Jost, sans-serif; cursor: pointer; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; }
+.lightbox button:hover { background: #f1d9d2; color: var(--dark); }
+.lightbox .lb-close { top: 12px; right: 12px; }
+.lightbox .lb-prev { left: 10px; top: 50%; transform: translateY(-50%); }
+.lightbox .lb-next { right: 10px; top: 50%; transform: translateY(-50%); }
+.lightbox .lb-count { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; color: #d9705e; font: 400 12px "Overpass Mono", monospace; letter-spacing: .08em; pointer-events: none; }
+.lightbox :focus-visible { outline-color: #f1d9d2; }
+body.lb-open { overflow: hidden; }
+@media (max-width: 600px) { .lightbox .lb-prev, .lightbox .lb-next { top: auto; bottom: 8px; transform: none; } .lightbox img { max-height: 80vh; } }
+
+/* ---------- registro delle tavole: /post, etichette, categorie ---------- */
+.arc { padding-top: 26px; }
+.arc .fl-head h1 small { display: block; font-size: 12px; letter-spacing: .12em; color: var(--mute); margin-bottom: 6px; font-weight: 400; }
+.reg { list-style: none; margin-top: 18px; border-top: 1.5px solid var(--ink); }
+.reg li { display: grid; grid-template-columns: 44px 96px minmax(0, 1fr) 110px 110px; gap: 16px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.reg .no { font: 400 11px "Overpass Mono", monospace; color: var(--mute); }
+.reg .th { display: block; aspect-ratio: 3 / 2; border: 1px solid var(--ink); overflow: hidden; background: var(--peg); }
+.reg .th img { width: 100%; height: 100%; object-fit: cover; }
+.reg .th .blank { display: block; width: 100%; height: 100%; background: repeating-linear-gradient(45deg, transparent 0 5px, rgba(26, 26, 26, .55) 5px 6px); }
+.reg .tt { font-weight: 500; font-size: 19px; line-height: 1.2; }
+.reg .tt:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.reg .dt { font: 400 12px "Overpass Mono", monospace; color: var(--mute); }
+.reg .rm { font: 400 11px/1 "Overpass Mono", monospace; letter-spacing: .06em; border: 1px solid var(--ink); padding: 9px 8px; justify-self: start; }
+.reg .rm:hover { background: var(--ink); color: var(--paper); }
+.reg-head { display: grid; grid-template-columns: 44px 96px minmax(0, 1fr) 110px 110px; gap: 16px; font: 400 10.5px "Overpass Mono", monospace; letter-spacing: .1em; color: var(--mute); margin-top: 26px; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.filters a { font: 400 11px/1 "Overpass Mono", monospace; border: 1px solid var(--ink); padding: 11px 9px; }
+.filters a:hover { background: var(--ink); color: var(--paper); }
+.filters a.on { background: var(--ink); color: var(--paper); }
+.arc .stairs { margin-top: 36px; }
+@media (max-width: 700px) {
+  .reg-head { display: none; }
+  .reg li { grid-template-columns: 84px minmax(0, 1fr); grid-template-rows: auto auto; column-gap: 12px; row-gap: 4px; align-items: start; position: relative; }
+  .reg .no { display: none; }
+  .reg .th { grid-row: 1 / 3; }
+  .reg .tt { font-size: 16.5px; }
+  .reg li .dt, .reg li .rm { grid-column: 2; }
+  .reg .rm { position: absolute; right: 0; bottom: 8px; }
+}
+
+/* ---------- Index: il catalogo di tutta la casa ---------- */
+.idx { padding-top: 26px; }
+.front { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 40px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); padding: 22px 0 26px; align-items: center; }
+.front .kicker { font-size: 12px; letter-spacing: .12em; color: var(--mute); }
+.front h1 { font-weight: 500; font-size: clamp(64px, 11vw, 150px); line-height: .95; margin: 10px 0 8px; letter-spacing: -.01em; }
+.front .sub { font-size: 13px; letter-spacing: .06em; color: var(--ink); }
+.imprint { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1.5px solid var(--ink); margin-top: 26px; max-width: 460px; font-size: 11px; }
+.imprint div { padding: 6px 8px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.imprint div:nth-child(2n) { border-right: 0; }
+.imprint div:nth-last-child(-n+2) { border-bottom: 0; }
+.imprint dt { color: var(--mute); letter-spacing: .08em; text-transform: uppercase; font-size: 10px; }
+.imprint dd { margin: 2px 0 0; font: 500 13px Jost, sans-serif; }
+.front-img img { width: 100%; height: auto; border: 1px solid var(--ink); }
+.cat { margin-top: 30px; }
+.cat h2 { font-weight: 500; font-size: 30px; line-height: 1.1; border-top: 1.5px solid var(--ink); padding-top: 10px; }
+.cat h2 a { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.cat h2 b { font: 600 13px Jost, sans-serif; letter-spacing: .16em; text-transform: uppercase; }
+.cat h2 a:hover span { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.entries { list-style: none; margin-top: 8px; }
+.entries li { display: flex; align-items: baseline; gap: 10px; padding: 5px 0; font-size: 17px; line-height: 1.3; }
+.entries li i { flex: none; align-self: flex-start; width: 26px; height: 22px; margin-top: 2px; text-align: left; font: 400 11px "Overpass Mono", monospace; font-style: normal; color: var(--mute); }
+.entries .et { padding: 4px 0; }
+.entries .et:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.entries .lead { flex: 1; border-bottom: 1px dotted var(--dash); min-width: 12px; transform: translateY(-4px); }
+.entries .fy { flex: none; font-size: 11px; color: var(--mute); white-space: nowrap; }
+.idx .stairs { margin-top: 44px; }
+@media (max-width: 800px) { .front { grid-template-columns: minmax(0, 1fr); } .front-img { order: -1; } }
+@media (max-width: 600px) {
+  .entries li { flex-wrap: wrap; }
+  .entries .et { flex: 1 1 calc(100% - 40px); }
+  .entries .lead { display: none; }
+  .entries .fy { margin-left: 36px; flex-basis: calc(100% - 36px); margin-top: -6px; padding-bottom: 4px; }
+}
+
+/* ---------- About ---------- */
+.about .page-sheet { min-width: 0; }
+.about-grid { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 36px; align-items: start; margin-top: 8px; }
+.about-grid .page-image img { width: 100%; height: auto; border: 1px solid var(--ink); }
+.about .pb { font-size: 17px; }
+.about .pb h1 { font-size: clamp(40px, 5vw, 68px); }
+@media (max-width: 900px) { .about-grid { grid-template-columns: minmax(0, 1fr); gap: 22px; } .about { display: flex; flex-direction: column; } }
+
+/* ---------- 404 e rimando ---------- */
+.nf { padding-top: 26px; }
+.nf-body { display: flex; gap: 28px; align-items: flex-start; margin-top: 26px; border-top: 1.5px solid var(--ink); padding-top: 22px; }
+.nf-body .mh { width: 56px; height: 92px; }
+.nf h1 { font-weight: 500; font-size: clamp(36px, 6vw, 68px); line-height: 1.02; margin-bottom: 14px; }
+.nf p { font-size: 18px; margin-bottom: 16px; }
+.nf .plates a { font-size: 13px; }
+.redir { margin-top: 20px; }
+.redir a { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 600px) { .nf-body { flex-direction: column; } }

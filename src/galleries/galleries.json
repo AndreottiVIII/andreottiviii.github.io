@@ -1,1 +1,1 @@
-{ "layout": "layouts/gallery.njk" }
+{ "layout": "layouts/gallery.njk", "floor": "photography", "bodyClass": "dark-room" }
