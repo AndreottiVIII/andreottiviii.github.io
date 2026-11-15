@@ -21,7 +21,7 @@ house: true
     {%- if f.key == 'projects' and H.letters %}
     <section class="fl lt-sec" id="letters">
       <div class="h"><b>Dovecote</b></div>
-      <h2><a href="{{ letters.url }}" target="_blank" rel="noopener">{{ letters.label }} <small>open ↗</small></a></h2>
+      <h2><a href="{{ letters.page }}">{{ letters.label }} <small>enter →</small></a></h2>
       <ol><li><i>L</i><a href="{{ letters.url }}" target="_blank" rel="noopener">My letters on Substack: letters leave the roof by carrier pigeon</a></li>
       {%- for a in letters.also %}
         <li><i>{{ a.key }}</i><a href="{{ a.url }}" target="_blank" rel="noopener">{{ a.label }}{% if a.note %}: {{ a.note }}{% endif %}</a>{% if a.lang == 'it' %} <span class="it">IT</span>{% endif %}</li>
@@ -41,7 +41,11 @@ house: true
       <div class="title mono"><span>SECTION A–A · 1:50</span><span>tap a floor</span></div>
       {% houseCover H %}
       {%- if H.letters %}
+      {%- if letters.page %}
+      <a class="lt-row lt-link" href="{{ letters.page }}"><i>L</i><span><b>{{ letters.label }}</b><br>dovecote · all my letters on Substack</span><em aria-hidden="true">→</em></a>
+      {%- else %}
       <a class="lt-row lt-link" href="{{ letters.url }}" target="_blank" rel="noopener"><i>L</i><span><b>{{ letters.label }}</b><br>dovecote · on Substack</span><em aria-hidden="true">↗</em></a>
+      {%- endif %}
       {%- for a in letters.also %}
       <a class="lt-row lt-link" href="{{ a.url }}" target="_blank" rel="noopener"><i>{{ a.key }}</i><span><b>{{ a.label }}</b>{% if a.lang == 'it' %} <span class="it">IT</span>{% endif %}<br>{{ a.note }}</span><em aria-hidden="true">↗</em></a>
       {%- endfor %}

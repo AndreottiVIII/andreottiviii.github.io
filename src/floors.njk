@@ -41,7 +41,7 @@ eleventyComputed:
   <p class="allsheets"><a href="/post">All sheets →</a><span class="mono">the register of every sheet in the study and the workshop</span></p>
   {%- endif %}
   <nav class="stairs" aria-label="Other floors">
-    {%- if i > 0 %}<a class="up" href="{{ floors[i - 1].url }}">↑ {{ floors[i - 1].name }}</a>{% endif %}
+    {%- if i > 0 %}<a class="up" href="{{ floors[i - 1].url }}">↑ {{ floors[i - 1].name }}</a>{% elif letters.page %}<a class="up" href="{{ letters.page }}">↑ {{ letters.label }}</a>{% endif %}
     <a class="whole" href="/">The whole house</a>
     {%- if i < floors.length - 1 %}<a class="down" href="{{ floors[i + 1].url }}">↓ {{ floors[i + 1].name }}</a>{% endif %}
   </nav>

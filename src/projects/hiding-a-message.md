@@ -6,4 +6,5 @@ lang: en
 order: 7
 featured: true
 tag: PAPER
+image: /img/house-p-paper.jpg
 ---

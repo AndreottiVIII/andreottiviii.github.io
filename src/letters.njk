@@ -1,0 +1,37 @@
+---
+layout: layouts/base.njk
+house: true
+permalink: /letters.html
+eleventyExcludeFromCollections: true
+floor: letters
+eleventyComputed:
+  title: "{{ letters.label }}"
+  description: "{{ letters.description }}"
+---
+{#- La piccionaia: le pubblicazioni su Substack, impaginate come i piani della casa (stessa griglia di floors.njk). I dati sono in _data/letters.json -#}
+{%- set items = [{ title: letters.profile.title, url: letters.url, note: letters.profile.note, image: letters.profile.image, key: "L", lang: "" }] -%}
+{%- for a in letters.also %}{% set items = (items.push({ title: a.label, url: a.url, note: a.note, image: a.image, key: a.key, lang: a.lang }), items) %}{% endfor -%}
+<div class="wrap floor-page floor-letters">
+  <div class="title mono"><span>ROOF PLAN · SECTION A–A</span><span>SCALE 1:50</span></div>
+  <header class="fl-head">
+    <div class="h"><b>Dovecote</b></div>
+    <h1>{{ letters.label }}</h1>
+    <p class="blurb">{{ letters.blurb }}</p>
+    <p class="count mono">{{ items.length }} {{ 'letter' if items.length == 1 else 'letters' }} · on Substack</p>
+  </header>
+  <ul class="grid">
+    {%- for it in items %}
+    <li class="cell">
+      <a class="thumb" href="{{ it.url }}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">{% if it.image %}<img src="{{ it.image }}" alt="" sizes="(max-width: 700px) 50vw, 25vw" loading="lazy" style="object-position:0 0">{% else %}<span class="blank">{{ it.key }}</span>{% endif %}</a>
+      <div class="meta">
+        <h2><a href="{{ it.url }}" target="_blank" rel="noopener">{{ it.title }} <span class="ext" aria-hidden="true">↗</span></a>{% if it.lang == 'it' %} <span class="it">IT</span>{% endif %}</h2>
+        {%- if it.note %}<p class="desc">{{ it.note[0] | upper }}{{ it.note.slice(1) }}.</p>{% endif %}
+      </div>
+    </li>
+    {%- endfor %}
+  </ul>
+  <nav class="stairs" aria-label="Other floors">
+    <a class="whole" href="/">The whole house</a>
+    <a class="down" href="{{ floors[0].url }}">↓ {{ floors[0].name }}</a>
+  </nav>
+</div>

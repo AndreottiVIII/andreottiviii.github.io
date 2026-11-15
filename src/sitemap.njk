@@ -22,6 +22,9 @@ eleventyExcludeFromCollections: true
   {%- for g in collections.house.byKey.photography.items %}
   <url><loc>{{ origin }}{{ g.url }}</loc></url>
   {%- endfor %}
+  {%- if letters.page %}
+  <url><loc>{{ origin }}{{ letters.page }}</loc></url>
+  {%- endif %}
   <url><loc>{{ origin }}/blog-index</loc></url>
   <url><loc>{{ origin }}/contact-davidecaniatti</loc></url>
 </urlset>

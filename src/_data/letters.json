@@ -1,14 +1,31 @@
 {
-  "url": "https://davidecaniatti.substack.com",
+  "url": "https://substack.com/@davidecaniatti",
+  "page": "/letters",
   "label": "Letters",
   "latest": "",
+  "description": "Davide Caniatti's letters on Substack: Milano da Bere, a weekly column on Milan, and Ariosto Daily, the Orlando furioso a few stanzas every morning.",
+  "blurb": "Letters that leave the roof by carrier pigeon, all on Substack.",
+  "profile": {
+    "title": "My Substack",
+    "note": "everything I write on Substack, in one place",
+    "image": "/img/letters-substack.jpg"
+  },
   "also": [
+    {
+      "key": "M",
+      "label": "Milano da Bere",
+      "url": "https://davidecaniatti96.substack.com",
+      "note": "a weekly column on Milan, out every Wednesday",
+      "lang": "it",
+      "image": "/img/letters-milano-da-bere.jpg"
+    },
     {
       "key": "A",
       "label": "Ariosto Daily",
       "url": "https://ariostodaily.substack.com",
       "note": "the Orlando furioso, a few stanzas every morning",
-      "lang": "it"
+      "lang": "it",
+      "image": "/img/letters-ariosto.jpg"
     }
   ]
 }
