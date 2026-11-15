@@ -121,7 +121,7 @@ main { display: block; }
 .social { list-style: none; display: flex; gap: 18px; flex-wrap: wrap; justify-content: flex-end; }
 .social a { display: block; width: 22px; height: 22px; color: var(--ink); }
 .social svg { width: 100%; height: 100%; fill: currentColor; }
-.cookie-reopen { background: none; border: 0; font: 400 11px "Overpass Mono", monospace; color: var(--mute); text-decoration: underline; cursor: pointer; padding: 6px; margin: -6px; }
+.cookie-reopen { background: none; border: 0; font: 400 11px "Overpass Mono", monospace; color: var(--mute); text-decoration: underline; cursor: pointer; padding: 9px 6px; margin: -9px -6px; }
 
 /* ---------- cookie ---------- */
 .cookie-banner { position: fixed; left: 0; right: 0; bottom: 0; z-index: 90; background: var(--paper); border-top: 1.5px solid var(--ink); padding: 14px var(--g); display: flex; gap: 20px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
@@ -385,7 +385,7 @@ img.broken { display: none; }
 /* ---------- gallerie: il cassetto della camera oscura (tutta la pagina e' scura) ---------- */
 .gal { padding-top: 26px; }
 .gal .fl-head { background: var(--dark); color: #f1d9d2; border-top-color: #f1d9d2; padding: 14px 0 22px; }
-.gal .fl-head .h a { font: 400 11px "Overpass Mono", monospace; color: #d9705e; padding: 8px 0; }
+.gal .fl-head .h a { font: 400 11px "Overpass Mono", monospace; color: #d9705e; padding: 9px 0; }
 .gal .fl-head .h a:hover { color: #f1d9d2; }
 .gal .fl-head .count { color: #d9705e; }
 .gal .fl-head h1 { font-size: clamp(44px, 7vw, 84px); }
@@ -421,6 +421,7 @@ img.broken { display: none; }
 .lightbox .lb-next { right: 10px; top: 50%; transform: translateY(-50%); }
 .lightbox .lb-count { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; color: #d9705e; font: 400 12px "Overpass Mono", monospace; letter-spacing: .08em; pointer-events: none; }
 .lightbox :focus-visible { outline-color: #f1d9d2; }
+.lightbox.single .lb-prev, .lightbox.single .lb-next, .lightbox.single .lb-count { display: none; }
 body.lb-open { overflow: hidden; }
 @media (max-width: 600px) { .lightbox .lb-prev, .lightbox .lb-next { top: auto; bottom: 8px; transform: none; } .lightbox img { max-height: 80vh; } }
 
@@ -436,7 +437,7 @@ body.lb-open { overflow: hidden; }
 .reg .tt { font-weight: 500; font-size: 19px; line-height: 1.2; }
 .reg .tt:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .reg .dt { font: 400 12px "Overpass Mono", monospace; color: var(--mute); }
-.reg .rm { font: 400 11px/1 "Overpass Mono", monospace; letter-spacing: .06em; border: 1px solid var(--ink); padding: 9px 8px; justify-self: start; }
+.reg .rm { font: 400 11px/1 "Overpass Mono", monospace; letter-spacing: .06em; border: 1px solid var(--ink); padding: 9.5px 8px; justify-self: start; }
 .reg .rm:hover { background: var(--ink); color: var(--paper); }
 .reg-head { display: grid; grid-template-columns: 44px 96px minmax(0, 1fr) 110px 110px; gap: 16px; font: 400 10.5px "Overpass Mono", monospace; letter-spacing: .1em; color: var(--mute); margin-top: 26px; }
 .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
@@ -511,7 +512,7 @@ body.lb-open { overflow: hidden; }
 /* aree di tocco: almeno 32 px */
 .hh nav a { min-height: 32px; justify-content: center; }
 .logo { padding: 3px 0; }
-.hf .links a { display: inline-block; padding: 7px 0; }
+.hf .links a { display: inline-block; padding: 7px 0; min-width: 32px; text-align: center; }
 .social { gap: 8px; }
 .social a { width: 32px; height: 32px; padding: 5px; }
 .entries .et { padding: 6px 0; }

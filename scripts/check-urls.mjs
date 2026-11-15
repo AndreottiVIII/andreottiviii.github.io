@@ -402,6 +402,34 @@ if (!IS_LAB && !/^true$/i.test(String(process.env.MOCKUP || "").trim())) {
     const file = resolveLikePages(u);
     if (file && /<meta name="robots" content="[^"]*noindex/i.test(read(file))) fail(`NOINDEX ${u}: la pagina chiede a Google di non indicizzarla`);
   }
+
+  // canonical, sitemap, robots e feed devono parlare del dominio vero (mai /lab/, mai l'indirizzo provvisorio)
+  const SITE_URL = JSON.parse(fs.readFileSync(path.resolve("src/_data/site.json"), "utf8")).url.replace(/\/+$/, "");
+  const onSite = (u) => (u === SITE_URL || u.startsWith(SITE_URL + "/")) && !/\/lab(\/|$)/.test(u.slice(SITE_URL.length));
+  for (const u of all) {
+    const file = resolveLikePages(u);
+    if (!file) continue;
+    const c = read(file).match(/<link rel="canonical" href="([^"]*)"/i);
+    if (!c) fail(`CANONICAL ${u}: manca <link rel="canonical">`);
+    else if (!onSite(c[1])) fail(`CANONICAL ${u}: punta fuori dal sito vero (${c[1]})`);
+  }
+  const robots = path.join(SITE_DIR, "robots.txt");
+  if (!fs.existsSync(robots)) fail("ROBOTS manca robots.txt");
+  else {
+    const r = read(robots);
+    if (/^\s*Disallow:\s*\/\s*$/im.test(r)) fail("ROBOTS robots.txt blocca tutto il sito (Disallow: /)");
+    if (!r.includes(`Sitemap: ${SITE_URL}/sitemap.xml`)) fail(`ROBOTS robots.txt non indica ${SITE_URL}/sitemap.xml`);
+  }
+  const sm = path.join(SITE_DIR, "sitemap.xml");
+  if (!fs.existsSync(sm)) fail("SITEMAP manca sitemap.xml");
+  else {
+    const locs = [...read(sm).matchAll(/<loc>([^<]*)<\/loc>/g)].map((m) => m[1]);
+    if (locs.length < SITEMAP.length) fail(`SITEMAP sitemap.xml ha solo ${locs.length} indirizzi`);
+    for (const l of locs.filter((l) => !onSite(l)).slice(0, 10)) fail(`SITEMAP indirizzo fuori dal sito vero: ${l}`);
+  }
+  const rss = path.join(SITE_DIR, "post", "rss.xml");
+  if (!fs.existsSync(rss)) fail("FEED manca post/rss.xml");
+  else for (const l of [...read(rss).matchAll(/<link>([^<]*)<\/link>/g)].map((m) => m[1]).filter((l) => !onSite(l)).slice(0, 10)) fail(`FEED indirizzo fuori dal sito vero: ${l}`);
 }
 
 if (errors.length) {

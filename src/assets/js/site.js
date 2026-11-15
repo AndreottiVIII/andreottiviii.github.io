@@ -13,7 +13,7 @@
   });
 
   /* ---- lightbox a schermo intero ---- */
-  var box, boxImg, boxCount, list = [], idx = 0, touchX = null;
+  var box, boxImg, boxCount, list = [], idx = 0, touchX = null, opener = null;
   function build() {
     box = document.createElement('div');
     box.className = 'lightbox';
@@ -41,10 +41,16 @@
   }
   function open(links, i) {
     if (!box) build();
+    opener = document.activeElement;
     list = links; box.classList.add('open'); document.body.classList.add('lb-open');
+    box.classList.toggle('single', links.length < 2); /* una foto sola: niente frecce */
     show(i); $('.lb-close', box).focus();
   }
-  function close() { box.classList.remove('open'); document.body.classList.remove('lb-open'); boxImg.src = ''; }
+  function close() {
+    box.classList.remove('open'); document.body.classList.remove('lb-open'); boxImg.removeAttribute('src');
+    /* la tastiera torna sulla foto da cui si era partiti */
+    if (opener && opener.focus) opener.focus();
+  }
   $$('[data-lightbox]').forEach(function (g) {
     var links = $$('a.lb', g);
     links.forEach(function (a, i) {
@@ -56,6 +62,13 @@
     if (e.key === 'Escape') close();
     else if (e.key === 'ArrowLeft') show(idx - 1);
     else if (e.key === 'ArrowRight') show(idx + 1);
+    else if (e.key === 'Tab') {
+      /* la tastiera resta dentro la lightbox finche' e' aperta */
+      var b = $$('button', box).filter(function (x) { return x.offsetParent !== null; });
+      var k = b.indexOf(document.activeElement);
+      e.preventDefault();
+      b[(k + (e.shiftKey ? -1 : 1) + b.length) % b.length].focus();
+    }
   });
 
   /* ---- cookie e Google Analytics ---- */
@@ -75,6 +88,16 @@
     s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(cfg.gaId);
     document.head.appendChild(s);
   }
+  /* cookie lasciati da Analytics (_ga, _ga_XXXX, _gid): si cancellano quando il consenso viene rifiutato o ritirato */
+  function clearGA() {
+    var host = location.hostname.split('.'), domains = [''];
+    for (var i = 0; i < host.length - 1; i++) domains.push('; domain=.' + host.slice(i).join('.'));
+    document.cookie.split(';').forEach(function (kv) {
+      var name = kv.split('=')[0].trim();
+      if (!/^_ga|^_gid$|^_gat/.test(name)) return;
+      domains.forEach(function (d) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + d; });
+    });
+  }
   if (banner) {
     var c = stored();
     if (c === 'granted') loadGA(); else if (c !== 'denied') banner.hidden = false;
@@ -82,7 +105,7 @@
       b.addEventListener('click', function () {
         var v = b.getAttribute('data-cookie'); store(v); banner.hidden = true;
         if (v === 'granted') loadGA();
-        else if (window.__gaLoaded) location.reload(); /* ritirato il consenso: ricarico senza Analytics */
+        else { clearGA(); if (window.__gaLoaded) location.reload(); } /* ritirato il consenso: via i cookie di Analytics, ricarico senza */
       });
     });
     $$('[data-cookie-open]').forEach(function (b) { b.addEventListener('click', function () { banner.hidden = false; }); });

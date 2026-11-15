@@ -11,7 +11,7 @@ eleventyExcludeFromCollections: true
     <description>{{ site.blog_description | xmlEscape }}</description>
     <language>en</language>
     <atom:link href="{{ origin }}/post/rss.xml" rel="self" type="application/rss+xml" />
-    {%- for p in collections.posts | notDuplicate | limit(20) %}
+    {%- for p in collections.posts | limit(20) %}
     <item>
       <title>{{ p.data.title | xmlEscape }}</title>
       <link>{{ origin }}{{ p.url | cleanUrl }}</link>

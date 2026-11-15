@@ -10,7 +10,7 @@ eleventyExcludeFromCollections: true
   {%- for f in floors %}
   <url><loc>{{ origin }}{{ f.url }}</loc></url>
   {%- endfor %}
-  {%- for p in collections.posts | notDuplicate %}
+  {%- for p in collections.posts %}
   <url><loc>{{ origin }}{{ p.url | cleanUrl }}</loc><lastmod>{{ p.date | dateISO }}</lastmod></url>
   {%- endfor %}
   {%- for c in collections.categoryList %}
@@ -19,8 +19,8 @@ eleventyExcludeFromCollections: true
   {%- for t in collections.tagList %}
   <url><loc>{{ origin }}{{ t.name | tagUrl | xmlEscape }}</loc></url>
   {%- endfor %}
-  {%- for w in site.work %}
-  <url><loc>{{ origin }}{{ w.url }}</loc></url>
+  {%- for g in collections.house.byKey.photography.items %}
+  <url><loc>{{ origin }}{{ g.url }}</loc></url>
   {%- endfor %}
   <url><loc>{{ origin }}/blog-index</loc></url>
   <url><loc>{{ origin }}/contact-davidecaniatti</loc></url>

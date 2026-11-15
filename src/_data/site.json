@@ -2,7 +2,7 @@
   "mockup": false,
   "name": "Davide Caniatti",
   "url": "https://davidecaniatti.com",
-  "mock_url": "https://andreottiviii.github.io",
+  "mock_url": "https://davidecaniatti.com",
   "ga_id": "G-B6VJN8NGT4",
   "blog_description": "I blog about art and photography, keeping an eye on the latest trends and yesterday's forgotten gems",
   "social": [
@@ -35,28 +35,6 @@
       "label": "IMDb",
       "href": "https://www.imdb.com/it/name/nm8707052/",
       "icon": "imdb"
-    }
-  ],
-  "work": [
-    {
-      "title": "Portrait",
-      "url": "/portrait-"
-    },
-    {
-      "title": "Out of time",
-      "url": "/out-of-time"
-    },
-    {
-      "title": "Still Life",
-      "url": "/still-life"
-    },
-    {
-      "title": "Corporate",
-      "url": "/corporate"
-    },
-    {
-      "title": "Milano Lockdown",
-      "url": "/human-nature-wells"
     }
   ]
 }

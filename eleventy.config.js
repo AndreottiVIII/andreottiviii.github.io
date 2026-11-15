@@ -11,7 +11,9 @@ const letters = require("./src/_data/letters.json");
 
 const SRC_IMG = path.join(__dirname, "src", "img");
 const WIDTHS = [480, 960, 1600];
-const imageInfo = {}; // nome file -> {w, h}
+const imageInfo = {}; // nome file -> {w, h, big}
+const MAX_IMG_BYTES = 2 * 1024 * 1024; // nessun file pubblicato oltre 2 MB
+const MAX_IMG_SIDE = 2500;
 // "" sul sito, "/lab" nel laboratorio. Il plugin HTML Base (in fondo) gira PRIMA di "html-polish":
 // quando questa trasformazione vede l'HTML, i percorsi locali hanno gia' il prefisso.
 const BASE = build.prefix.slice(0, -1);
@@ -22,30 +24,27 @@ module.exports = async function (eleventyConfig) {
   // ---------- Markdown ----------
   const md = new MarkdownIt({ html: true, breaks: false, linkify: false });
   eleventyConfig.setLibrary("md", md);
-  eleventyConfig.addFilter("mdInline", (s) => (s ? md.renderInline(String(s)) : ""));
   eleventyConfig.addFilter("mdBlock", (s) => (s ? md.render(String(s)) : ""));
 
   // ---------- File copiati cosi' come sono ----------
   eleventyConfig.addPassthroughCopy({ "src/img": "img" });
   eleventyConfig.addPassthroughCopy({ "src/fonts": "fonts" });
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
-  eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
 
   // ---------- Collezioni ----------
-  // piu' recente prima; a parita' di data l'articolo "copia" (duplicate_of) viene dopo l'originale
-  const byDate = (a, b) =>
-    b.date - a.date ||
-    (a.data.duplicate_of ? 1 : 0) - (b.data.duplicate_of ? 1 : 0) ||
-    a.inputPath.localeCompare(b.inputPath);
-  eleventyConfig.addCollection("posts", (api) => api.getFilteredByGlob("src/posts/*.md").sort(byDate));
-  eleventyConfig.addCollection("pageDocs", (api) => api.getFilteredByGlob("src/pages/*.md"));
+  // piu' recente prima. L'articolo "copia" (duplicate_of: il doppio indirizzo del Seagull 4A) ha la sua pagina
+  // ma non entra negli elenchi (registro, etichette, categorie, feed, sitemap), come gia' nella casa e nell'Index.
+  const byDate = (a, b) => b.date - a.date || a.inputPath.localeCompare(b.inputPath);
+  const allPosts = (api) => api.getFilteredByGlob("src/posts/*.md").sort(byDate);
+  eleventyConfig.addCollection("posts", (api) => allPosts(api).filter((p) => !p.data.duplicate_of));
 
+  // etichette e categorie: i nomi vengono da tutti gli articoli (nessuna pagina vecchia sparisce), gli elenchi senza la copia
   const group = (api, key) => {
     const map = new Map();
-    for (const p of api.getFilteredByGlob("src/posts/*.md").sort(byDate)) {
+    for (const p of allPosts(api)) {
       for (const name of p.data[key] || []) {
         if (!map.has(name)) map.set(name, []);
-        map.get(name).push(p);
+        if (!p.data.duplicate_of) map.get(name).push(p);
       }
     }
     return [...map.entries()].map(([name, posts]) => ({ name, posts }));
@@ -98,7 +97,6 @@ module.exports = async function (eleventyConfig) {
   eleventyConfig.addFilter("tagFile", (n) => "/post/tag/" + n.replace(/ /g, "+") + ".html");
   eleventyConfig.addFilter("categoryFile", (n) => "/post/category/" + n.replace(/ /g, "+") + ".html");
 
-  eleventyConfig.addFilter("dateShort", (d) => `${d.getUTCMonth() + 1}/${d.getUTCDate()}/${pad(d.getUTCFullYear() % 100)}`);
   const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   eleventyConfig.addFilter("dateMD", (d) => `${MON[d.getUTCMonth()]} ${d.getUTCDate()}`);
@@ -134,17 +132,9 @@ module.exports = async function (eleventyConfig) {
   });
   eleventyConfig.addFilter("dateISO", (d) => d.toISOString().slice(0, 10));
   eleventyConfig.addFilter("dateRFC822", (d) => d.toUTCString());
-  eleventyConfig.addFilter("neighbour", (list, url, off) => {
-    const i = list.findIndex((p) => p.url === url);
-    return i < 0 ? null : list[i + off] || null;
-  });
   eleventyConfig.addFilter("findUrl", (list, url) => list.find((p) => p.url === url || p.page?.url === url));
-  eleventyConfig.addFilter("pageByKey", (list, key) => list.find((p) => p.fileSlug === key));
   eleventyConfig.addFilter("limit", (a, n) => a.slice(0, n));
-  eleventyConfig.addFilter("notDuplicate", (a) => a.filter((p) => !p.data.duplicate_of));
   eleventyConfig.addFilter("absUrl", (p, base) => (p === "/" ? base : base + p));
-  eleventyConfig.addFilter("imgPath", (p) => p);
-  eleventyConfig.addFilter("jsonStr", (s) => JSON.stringify(s));
   eleventyConfig.addFilter("xmlEscape", (s) =>
     String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
   );
@@ -155,10 +145,30 @@ module.exports = async function (eleventyConfig) {
     for (const f of fs.readdirSync(SRC_IMG)) {
       if (!/\.(jpe?g|png|webp)$/i.test(f)) continue;
       if (imageInfo[f]) continue;
-      const m = await sharp(path.join(SRC_IMG, f)).metadata();
-      imageInfo[f] = { w: m.width, h: m.height };
+      const file = path.join(SRC_IMG, f);
+      const m = await sharp(file).metadata();
+      // foto da telefono: l'orientamento sta nei dati EXIF (5-8 = girata di 90 gradi)
+      let w = m.orientation >= 5 ? m.height : m.width;
+      let h = m.orientation >= 5 ? m.width : m.height;
+      // foto oltre 2 MB (caricate dal pannello cosi' come escono dal telefono): sul sito va una copia
+      // ridotta a 2500 px di lato lungo, l'originale in src/img resta com'e'. La rete di sicurezza blocca i file oltre 2 MB.
+      const big = fs.statSync(file).size > MAX_IMG_BYTES;
+      if (big && Math.max(w, h) > MAX_IMG_SIDE) {
+        const k = MAX_IMG_SIDE / Math.max(w, h);
+        w = Math.round(w * k);
+        h = Math.round(h * k);
+      }
+      imageInfo[f] = { w, h, big };
     }
   });
+
+  // stesso formato del file di partenza; l'estensione resta scritta com'era (".JPG" resta ".JPG": su Linux conta)
+  const encode = (pipe, ext, quality = 82) => {
+    const e = ext.toLowerCase();
+    if (e === ".png") return pipe.png({ compressionLevel: 9 });
+    if (e === ".webp") return pipe.webp({ quality });
+    return pipe.jpeg({ quality, progressive: true, mozjpeg: true });
+  };
 
   eleventyConfig.on("eleventy.after", async ({ dir }) => {
     const outW = path.join(dir.output, "img", "w");
@@ -167,21 +177,28 @@ module.exports = async function (eleventyConfig) {
     fs.mkdirSync(cache, { recursive: true });
     const jobs = [];
     for (const [f, info] of Object.entries(imageInfo)) {
-      const ext = path.extname(f).toLowerCase();
+      const ext = path.extname(f);
       const stem = path.basename(f, ext);
+      const src = path.join(SRC_IMG, f);
+      if (info.big) {
+        // la copia ridotta prende il posto dell'originale in _site/img (dopo la copia dei file)
+        jobs.push(async () => {
+          const dest = path.join(dir.output, "img", f);
+          for (const q of [82, 72, 60]) {
+            await encode(sharp(src).rotate().resize({ width: info.w, height: info.h, fit: "inside", withoutEnlargement: true }), ext, q).toFile(dest + ".tmp");
+            fs.renameSync(dest + ".tmp", dest);
+            if (fs.statSync(dest).size <= MAX_IMG_BYTES) break;
+          }
+        });
+      }
       for (const w of WIDTHS) {
         if (info.w <= w + 40) continue;
         const name = `${stem}-${w}${ext}`;
         const dest = path.join(outW, name);
         const cached = path.join(cache, name);
-        const src = path.join(SRC_IMG, f);
         const fresh = fs.existsSync(cached) && fs.statSync(cached).mtimeMs >= fs.statSync(src).mtimeMs;
         jobs.push(async () => {
-          if (!fresh) {
-            const pipe = sharp(src).resize({ width: w, withoutEnlargement: true });
-            if (ext === ".png") await pipe.png({ compressionLevel: 9 }).toFile(cached);
-            else await pipe.jpeg({ quality: 82, progressive: true, mozjpeg: true }).toFile(cached);
-          }
+          if (!fresh) await encode(sharp(src).rotate().resize({ width: w, withoutEnlargement: true }), ext).toFile(cached);
           fs.copyFileSync(cached, dest);
         });
       }
