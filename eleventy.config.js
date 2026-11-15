@@ -11,7 +11,9 @@ const letters = require("./src/_data/letters.json");
 
 const SRC_IMG = path.join(__dirname, "src", "img");
 const WIDTHS = [480, 960, 1600];
-const imageInfo = {}; // nome file -> {w, h}
+const imageInfo = {}; // nome file -> {w, h, big}
+const MAX_IMG_BYTES = 2 * 1024 * 1024; // nessun file pubblicato oltre 2 MB
+const MAX_IMG_SIDE = 2500;
 // "" sul sito, "/lab" nel laboratorio. Il plugin HTML Base (in fondo) gira PRIMA di "html-polish":
 // quando questa trasformazione vede l'HTML, i percorsi locali hanno gia' il prefisso.
 const BASE = build.prefix.slice(0, -1);
@@ -155,10 +157,30 @@ module.exports = async function (eleventyConfig) {
     for (const f of fs.readdirSync(SRC_IMG)) {
       if (!/\.(jpe?g|png|webp)$/i.test(f)) continue;
       if (imageInfo[f]) continue;
-      const m = await sharp(path.join(SRC_IMG, f)).metadata();
-      imageInfo[f] = { w: m.width, h: m.height };
+      const file = path.join(SRC_IMG, f);
+      const m = await sharp(file).metadata();
+      // foto da telefono: l'orientamento sta nei dati EXIF (5-8 = girata di 90 gradi)
+      let w = m.orientation >= 5 ? m.height : m.width;
+      let h = m.orientation >= 5 ? m.width : m.height;
+      // foto oltre 2 MB (caricate dal pannello cosi' come escono dal telefono): sul sito va una copia
+      // ridotta a 2500 px di lato lungo, l'originale in src/img resta com'e'. La rete di sicurezza blocca i file oltre 2 MB.
+      const big = fs.statSync(file).size > MAX_IMG_BYTES;
+      if (big && Math.max(w, h) > MAX_IMG_SIDE) {
+        const k = MAX_IMG_SIDE / Math.max(w, h);
+        w = Math.round(w * k);
+        h = Math.round(h * k);
+      }
+      imageInfo[f] = { w, h, big };
     }
   });
+
+  // stesso formato del file di partenza; l'estensione resta scritta com'era (".JPG" resta ".JPG": su Linux conta)
+  const encode = (pipe, ext, quality = 82) => {
+    const e = ext.toLowerCase();
+    if (e === ".png") return pipe.png({ compressionLevel: 9 });
+    if (e === ".webp") return pipe.webp({ quality });
+    return pipe.jpeg({ quality, progressive: true, mozjpeg: true });
+  };
 
   eleventyConfig.on("eleventy.after", async ({ dir }) => {
     const outW = path.join(dir.output, "img", "w");
@@ -167,21 +189,28 @@ module.exports = async function (eleventyConfig) {
     fs.mkdirSync(cache, { recursive: true });
     const jobs = [];
     for (const [f, info] of Object.entries(imageInfo)) {
-      const ext = path.extname(f).toLowerCase();
+      const ext = path.extname(f);
       const stem = path.basename(f, ext);
+      const src = path.join(SRC_IMG, f);
+      if (info.big) {
+        // la copia ridotta prende il posto dell'originale in _site/img (dopo la copia dei file)
+        jobs.push(async () => {
+          const dest = path.join(dir.output, "img", f);
+          for (const q of [82, 72, 60]) {
+            await encode(sharp(src).rotate().resize({ width: info.w, height: info.h, fit: "inside", withoutEnlargement: true }), ext, q).toFile(dest + ".tmp");
+            fs.renameSync(dest + ".tmp", dest);
+            if (fs.statSync(dest).size <= MAX_IMG_BYTES) break;
+          }
+        });
+      }
       for (const w of WIDTHS) {
         if (info.w <= w + 40) continue;
         const name = `${stem}-${w}${ext}`;
         const dest = path.join(outW, name);
         const cached = path.join(cache, name);
-        const src = path.join(SRC_IMG, f);
         const fresh = fs.existsSync(cached) && fs.statSync(cached).mtimeMs >= fs.statSync(src).mtimeMs;
         jobs.push(async () => {
-          if (!fresh) {
-            const pipe = sharp(src).resize({ width: w, withoutEnlargement: true });
-            if (ext === ".png") await pipe.png({ compressionLevel: 9 }).toFile(cached);
-            else await pipe.jpeg({ quality: 82, progressive: true, mozjpeg: true }).toFile(cached);
-          }
+          if (!fresh) await encode(sharp(src).rotate().resize({ width: w, withoutEnlargement: true }), ext).toFile(cached);
           fs.copyFileSync(cached, dest);
         });
       }
