@@ -523,3 +523,26 @@ body.lb-open { overflow: hidden; }
 .social a { width: 32px; height: 32px; padding: 5px; }
 .entries .et { padding: 6px 0; }
 .reg .tt { padding: 6px 0; }
+
+/* ---------- il vault: la cassaforte in cantina (pagina chiusa da combinazione) ---------- */
+.vt-hit { position: absolute; display: block; }
+.vt-hit:hover, .vt-hit:focus-visible { outline: 1.5px solid #e5705b; outline-offset: 2px; }
+.vault .blurb { color: #f1d9d2; }
+.vt-door { display: flex; align-items: center; gap: 34px; flex-wrap: wrap; margin: 34px 0 10px; padding: 28px; border: 1.5px solid #5a2a22; max-width: 640px; }
+.vt-safe { width: 150px; height: auto; color: #e9b3a8; flex: none; }
+.vt-lock { flex: 1 1 240px; }
+.vt-lock label { display: block; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #d9705e; margin-bottom: 8px; }
+.vt-row { display: flex; gap: 8px; }
+.vt-row input { flex: 1; min-width: 0; font: 400 18px "Overpass Mono", monospace; letter-spacing: .1em; padding: 10px 12px; background: #1a0b09; color: #f1d9d2; border: 1px solid #e9b3a8; border-radius: 0; }
+.vt-row input:focus { outline: 2px solid #e5705b; outline-offset: 1px; }
+.vt-row button { font: 600 13px Jost, sans-serif; letter-spacing: .12em; text-transform: uppercase; padding: 0 18px; background: #e9b3a8; color: var(--dark); border: 0; cursor: pointer; }
+.vt-row button:hover { background: #f1d9d2; }
+.vt-msg { min-height: 1.4em; margin-top: 10px; font-size: 12px; color: #e5705b; }
+.vault .count { color: #d9705e; }
+.vt-close { font: inherit; color: #f1d9d2; background: none; border: 0; border-bottom: 1px solid currentColor; padding: 0; cursor: pointer; }
+.vault .cell .thumb { border-color: #5a2a22; background: #1a0b09; }
+.vault .cell .desc { color: #e0c3bb; }
+.vault .cell .thumb .blank { color: #d9705e; background: #1a0b09; }
+.vt-set { margin-top: 54px; padding-top: 18px; border-top: 1.5px solid #5a2a22; }
+.vt-set h2 { font-weight: 500; font-size: 30px; }
+@media (max-width: 600px) { .vt-door { padding: 18px; gap: 18px; } .vt-safe { width: 96px; } }

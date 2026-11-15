@@ -10,6 +10,9 @@
   {%- if f.deskN %}
   <li class="peg"><i>{{ f.deskN }}</i>On the desk, the latest: {% for p in f.desk %}<a href="{{ p.url }}">{{ p.deskTitle }}</a>{% if not loop.last %}, {% endif %}{% endfor %} · <a href="/post">every sheet, newest first →</a></li>
   {%- endif %}
+  {%- if f.key == 'photography' and vault.page %}
+  <li class="lt-li vt-li"><i>V</i><a href="{{ vault.page }}">{{ vault.label }}: {{ vault.note }} →</a></li>
+  {%- endif %}
   {%- if f.key == 'writing' %}
   <li class="more idx-li"><a href="/blog-index">The index of every sheet in the house →</a></li>
   {%- endif %}

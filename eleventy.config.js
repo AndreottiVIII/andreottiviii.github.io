@@ -29,6 +29,7 @@ module.exports = async function (eleventyConfig) {
   // ---------- File copiati cosi' come sono ----------
   eleventyConfig.addPassthroughCopy({ "src/img": "img" });
   eleventyConfig.addPassthroughCopy({ "src/fonts": "fonts" });
+  eleventyConfig.addPassthroughCopy({ "src/vault-box": "vault-box" });
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
 
   // ---------- Collezioni ----------
