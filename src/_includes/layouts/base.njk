@@ -26,10 +26,15 @@
 {%- if description %}
 <meta property="og:description" content="{{ description }}">
 {%- endif %}
-{%- if cover %}
-<meta property="og:image" content="{{ origin }}{{ cover }}">
+{#- immagine per le condivisioni: la copertina dell'articolo, se no la prima foto della galleria, se no la scheda della casa (img/share.jpg) -#}
+{%- set shareImg = cover or (gallery[0].image if gallery and gallery[0]) or "/img/share.jpg" -%}
+<meta property="og:image" content="{{ origin }}{{ shareImg }}">
+{%- if shareImg == "/img/share.jpg" %}
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Davide Caniatti: the house in section, from the greenhouse to the darkroom">
 {%- endif %}
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="/fonts/jost-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/house.css">
 <script>window.SITE={mockup:{{ 'true' if build.mockup else 'false' }}{% if not build.mockup %},gaId:"{{ site.ga_id }}"{% endif %}};</script>
