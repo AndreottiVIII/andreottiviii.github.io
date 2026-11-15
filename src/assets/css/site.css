@@ -72,6 +72,7 @@ img.broken { display: none; }
 .cookie-banner { position: fixed; left: 0; right: 0; bottom: 0; z-index: 90; background: var(--paper); border-top: 1px solid var(--ink); padding: 14px var(--gutter); display: flex; gap: 20px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
 .cookie-banner[hidden] { display: none; }
 .cookie-banner p { margin: 0; font-size: 0.85rem; line-height: 1.5; max-width: 60ch; }
+.cookie-banner p .cookie-it { display: block; color: var(--grey); }
 .cookie-actions { display: flex; gap: 10px; }
 .cookie-actions button { font: 500 0.85rem var(--font); min-width: 110px; padding: 10px 18px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); cursor: pointer; }
 .cookie-actions button:hover { background: var(--ink); color: var(--paper); }
