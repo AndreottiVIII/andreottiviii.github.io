@@ -1,7 +1,8 @@
 ---
 layout: layouts/base.njk
 ---
-{%- set drawers = site.work -%}
+{#- i cassetti: le gallerie della camera oscura, nello stesso ordine della pagina Photography (una galleria nuova dal pannello compare da sola) -#}
+{%- set drawers = collections.house.byKey.photography.items -%}
 {%- set cur = page.url | cleanUrl -%}
 {%- set idx = drawers | urlIndex(cur) -%}
 {%- set nextD = drawers[(idx + 1) % drawers.length] -%}

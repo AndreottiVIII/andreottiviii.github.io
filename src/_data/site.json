@@ -36,27 +36,5 @@
       "href": "https://www.imdb.com/it/name/nm8707052/",
       "icon": "imdb"
     }
-  ],
-  "work": [
-    {
-      "title": "Portrait",
-      "url": "/portrait-"
-    },
-    {
-      "title": "Out of time",
-      "url": "/out-of-time"
-    },
-    {
-      "title": "Still Life",
-      "url": "/still-life"
-    },
-    {
-      "title": "Corporate",
-      "url": "/corporate"
-    },
-    {
-      "title": "Milano Lockdown",
-      "url": "/human-nature-wells"
-    }
   ]
 }
