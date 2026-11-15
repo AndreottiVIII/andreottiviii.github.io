@@ -333,6 +333,7 @@ img.broken { display: none; }
 .pb li { margin-bottom: .3em; }
 .pb { counter-reset: fig; }
 .pb figure.photo { margin: 30px 0; counter-increment: fig; }
+.pb figure.photo:has(img.broken) { display: none; } /* foto gia' persa sul vecchio sito: niente FIG. vuota */
 .pb figure.photo img { width: 100%; height: auto; border: 1px solid var(--ink); }
 .pb figure.photo a { display: block; text-decoration: none; }
 .pb figcaption { font: 400 11.5px/1.5 "Overpass Mono", monospace; color: var(--mute); margin-top: 8px; }
