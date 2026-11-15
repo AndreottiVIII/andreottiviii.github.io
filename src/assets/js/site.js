@@ -51,12 +51,14 @@
     /* la tastiera torna sulla foto da cui si era partiti */
     if (opener && opener.focus) opener.focus();
   }
-  $$('[data-lightbox]').forEach(function (g) {
+  function bindLightbox(g) {
     var links = $$('a.lb', g);
     links.forEach(function (a, i) {
       a.addEventListener('click', function (e) { e.preventDefault(); open(links, i); });
     });
-  });
+  }
+  $$('[data-lightbox]').forEach(bindLightbox);
+  window.dcLightbox = bindLightbox; /* il vault lo usa dopo aver aperto le foto */
   document.addEventListener('keydown', function (e) {
     if (!box || !box.classList.contains('open')) return;
     if (e.key === 'Escape') close();

@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ fullTitle }}</title>
-{%- if build.mockup %}
+{%- if build.mockup or noindex %}
 <meta name="robots" content="noindex, nofollow">
 {%- endif %}
 {%- if description %}
