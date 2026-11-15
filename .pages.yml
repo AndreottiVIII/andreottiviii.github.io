@@ -78,7 +78,7 @@ content:
         label: Scritta sulla targhetta dell'officina (facoltativo, max 10 lettere)
         type: string
       - name: excerpt
-        label: Riassunto nell'elenco del blog e nella home
+        label: Riassunto (usato solo nel feed RSS)
         type: text
       - name: permalink
         label: Indirizzo (lasciare vuoto per gli articoli nuovi; NON cambiarlo per quelli già pubblicati)
@@ -94,13 +94,13 @@ content:
     type: collection
     path: src/galleries
     filename: "{primary}.md"
-    exclude: [galleries.json]
+    exclude: [galleries.11tydata.js]
     view:
       fields: [title]
       primary: title
     fields:
       - name: title
-        label: Nome nel menu
+        label: Titolo della galleria
         type: string
         required: true
       - name: seo_title
@@ -164,34 +164,12 @@ content:
 
   # ---------------- Pagine singole ----------------
   - name: home
-    label: Home
+    label: Home (la casa si disegna da sola dai contenuti)
     type: file
     path: src/pages/home.md
     fields:
       - { name: seo_title, label: Titolo per Google, type: string }
       - { name: description, label: Descrizione per Google, type: text }
-      - name: hero
-        label: Foto in alto
-        type: object
-        fields:
-          - { name: image, label: Foto, type: image }
-          - { name: alt, label: Testo alternativo, type: text }
-      - name: button
-        label: Pulsante
-        type: object
-        fields:
-          - { name: text, label: Testo, type: string }
-          - { name: href, label: Indirizzo, type: string }
-      - { name: latest_heading, label: Titolo "ultimi articoli", type: string }
-      - { name: featured_label, label: Etichetta sopra gli articoli, type: string }
-      - name: slideshow
-        label: Foto a scorrimento in fondo
-        type: object
-        list: true
-        fields:
-          - { name: image, label: Foto, type: image }
-          - { name: alt, label: Testo alternativo, type: text }
-      - { name: body, label: Presentazione, type: rich-text }
 
   - name: about
     label: About me
@@ -205,7 +183,7 @@ content:
       - { name: body, label: Testo, type: rich-text }
 
   - name: index
-    label: Index (elenco degli articoli)
+    label: "Index (elenco automatico; qui solo testi per Google e la foto)"
     type: file
     path: src/pages/blog-index.md
     fields:
@@ -213,7 +191,6 @@ content:
       - { name: description, label: Descrizione per Google, type: text }
       - { name: image, label: Foto, type: image }
       - { name: image_alt, label: Testo alternativo della foto, type: text }
-      - { name: body, label: Testo, type: rich-text }
 
   - name: letters
     label: Letters (la piccionaia, Substack)
