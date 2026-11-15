@@ -1,4 +1,4 @@
-{%- set origin = site.mock_url if site.mockup else site.url -%}
+{%- set origin = build.origin -%}
 {%- set pageUrl = canonical or (page.url | cleanUrl) -%}
 {%- set fullTitle = headTitle or ((seo_title or title) + " — " + site.name) -%}
 <!doctype html>
@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ fullTitle }}</title>
-{%- if site.mockup %}
+{%- if build.mockup %}
 <meta name="robots" content="noindex, nofollow">
 {%- endif %}
 {%- if description %}
@@ -30,18 +30,26 @@
 <meta property="og:image" content="{{ origin }}{{ cover }}">
 {%- endif %}
 <meta name="twitter:card" content="summary">
+{%- if house %}
+<link rel="preload" href="/fonts/jost-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/house.css">
+{%- else %}
 <link rel="preload" href="/fonts/montserrat-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/site.css">
-<script>window.SITE={mockup:{{ 'true' if site.mockup else 'false' }}{% if not site.mockup %},gaId:"{{ site.ga_id }}"{% endif %}};</script>
+{%- endif %}
+<script>window.SITE={mockup:{{ 'true' if build.mockup else 'false' }}{% if not build.mockup %},gaId:"{{ site.ga_id }}"{% endif %}};</script>
 </head>
 <body>
 <a class="skip-link" href="#page">Skip to Content</a>
-{% include "header.njk" %}
+{% if house %}{% include "house-header.njk" %}{% else %}{% include "header.njk" %}{% endif %}
 <main id="page">
 {{ content | safe }}
 </main>
-{% include "footer.njk" %}
+{% if house %}{% include "house-footer.njk" %}{% else %}{% include "footer.njk" %}{% endif %}
 {% include "cookie.njk" %}
 <script src="/assets/js/site.js" defer></script>
+{%- if house %}
+<script src="/assets/js/house.js" defer></script>
+{%- endif %}
 </body>
 </html>

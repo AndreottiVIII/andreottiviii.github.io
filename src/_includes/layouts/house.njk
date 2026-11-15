@@ -1,0 +1,75 @@
+---
+layout: layouts/base.njk
+house: true
+---
+{%- set H = collections.house -%}
+<script>if(location.pathname==='{{ '/index' | url }}')location.replace('{{ '/blog-index' | url }}');</script>
+{% houseDefs H %}
+<div class="wrap sheet desk">
+  <div class="draw">
+    <div class="title mono"><span>SECTION A–A</span><span>SCALE 1:50</span></div>
+    {% houseDrawing H %}
+  </div>
+  <aside class="key" aria-label="The house, floor by floor">
+    <p class="intro">Scroll down the house, from the greenhouse to the darkroom. <em>Every number is something to open.</em></p>
+    {%- for f in H.floors %}
+    <section class="fl{% if f.key == 'photography' %} dark{% endif %}" id="{{ f.key }}">
+      <div class="h"><b>{{ f.room }}</b></div>
+      <h2><a href="{{ f.url }}">{{ f.name }} <small>enter →</small></a></h2>
+      {% include "legend-list.njk" %}
+    </section>
+    {%- if f.key == 'projects' and H.letters %}
+    <section class="fl lt-sec" id="letters">
+      <div class="h"><b>Dovecote</b></div>
+      <h2><a href="{{ letters.url }}" target="_blank" rel="noopener">{{ letters.label }} <small>open ↗</small></a></h2>
+      <ol><li><i>L</i><a href="{{ letters.url }}" target="_blank" rel="noopener">My letters on Substack: letters leave the roof by carrier pigeon</a></li>
+      {%- for a in letters.also %}
+        <li><i>{{ a.key }}</i><a href="{{ a.url }}" target="_blank" rel="noopener">{{ a.label }}{% if a.note %}: {{ a.note }}{% endif %}</a>{% if a.lang == 'it' %} <span class="it">IT</span>{% endif %}</li>
+      {%- endfor %}</ol>
+      {%- if letters.latest %}<p class="ph">latest: <b>{{ letters.latest }}</b></p>{% endif %}
+    </section>
+    {%- endif %}
+    {%- endfor %}
+    <div class="block"><div><b>Davide Caniatti</b>drawing</div><div><b>A–A</b>section</div><div><b>1:50</b>scale</div><div><b>Milan</b>place</div><a href="/contact-davidecaniatti"><b>About</b>contact</a><div><b>01</b>sheet</div></div>
+  </aside>
+</div>
+
+{#- Telefono (sotto i 768 px): la copertina con le quattro fasce, poi i piani ingranditi, uno dopo l'altro, ognuno con la sua legenda -#}
+<div class="phone">
+  <div class="wrap">
+    <section class="cover" aria-label="The house, floor by floor">
+      <div class="title mono"><span>SECTION A–A · 1:50</span><span>tap a floor</span></div>
+      {% houseCover H %}
+      {%- if H.letters %}
+      <a class="lt-row lt-link" href="{{ letters.url }}" target="_blank" rel="noopener"><i>L</i><span><b>{{ letters.label }}</b><br>dovecote · on Substack</span><em aria-hidden="true">↗</em></a>
+      {%- for a in letters.also %}
+      <a class="lt-row lt-link" href="{{ a.url }}" target="_blank" rel="noopener"><i>{{ a.key }}</i><span><b>{{ a.label }}</b>{% if a.lang == 'it' %} <span class="it">IT</span>{% endif %}<br>{{ a.note }}</span><em aria-hidden="true">↗</em></a>
+      {%- endfor %}
+      {%- endif %}
+      <p class="hint mono">tap a floor to go down to it</p>
+      <p class="intro">One floor for each thing I do. <em>Every number is something to open.</em></p>
+    </section>
+    {%- for f in H.floors %}
+    <section class="pfloor{% if f.key == 'photography' %} dark{% endif %}" id="floor-{{ f.key }}" data-lv="{{ f.room | lower }}">
+      <div class="fh"><b>{{ f.room }}</b><a href="{{ f.url }}">enter →</a></div>
+      <h2><a href="{{ f.url }}">{{ f.name }}</a></h2>
+      {% houseFloor H, f.key %}
+      <div class="fl-list">
+      {% set withLetters = (f.key == 'projects' and H.letters) %}
+      {% include "legend-list.njk" %}
+      </div>
+    </section>
+    {%- endfor %}
+    <div class="block"><div><b>Davide Caniatti</b>drawing</div><div><b>A–A</b>section</div><div><b>1:50</b>scale</div><div><b>Milan</b>place</div><a href="/contact-davidecaniatti"><b>About</b>contact</a><div><b>01</b>sheet</div></div>
+  </div>
+  <a class="here" href="#page" aria-label="Back to the top of the house" hidden>
+    <svg viewBox="0 0 34 56" aria-hidden="true"><path d="M3 15 L17 2 L31 15" fill="none" stroke="#1a1a1a" stroke-width="1.4"/>
+      <rect id="h0" x="3" y="15" width="28" height="9" fill="none" stroke="#1a1a1a"/>
+      <rect id="h1" x="3" y="24" width="28" height="10" fill="none" stroke="#1a1a1a"/>
+      <rect id="h2" x="3" y="34" width="28" height="10" fill="none" stroke="#1a1a1a"/>
+      <rect id="h3" x="3" y="44" width="28" height="10" fill="none" stroke="#1a1a1a" class="d"/>
+      <line x1="0" y1="44" x2="34" y2="44" stroke="#1a1a1a" stroke-width="1.6"/></svg>
+    <span class="t">you are here<b id="hl"></b></span>
+  </a>
+</div>
+{% houseRemember %}

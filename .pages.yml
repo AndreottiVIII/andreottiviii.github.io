@@ -54,6 +54,29 @@ content:
       - name: cover
         label: Immagine di copertina (anteprime e condivisioni)
         type: image
+      - name: floor
+        label: Piano della casa (dove compare nella home)
+        type: select
+        options:
+          values:
+            - { value: writing, label: "Writing (studiolo): mostre, arte, note personali" }
+            - { value: workshop, label: "Workshop (officina): macchine, lenti, pellicole, carte" }
+        description: "Se lo lasci vuoto va in Writing."
+      - name: featured
+        label: In evidenza nel disegno della casa
+        type: boolean
+      - name: order
+        label: Posizione tra quelli in evidenza (1 = primo posto, facoltativo)
+        type: number
+      - name: image
+        label: Foto per il disegno della casa (se vuota si usa la copertina)
+        type: image
+      - name: short
+        label: Nome corto per l'elenco "On the pegboard" (facoltativo)
+        type: string
+      - name: plate
+        label: Scritta sulla targhetta dell'officina (facoltativo, max 10 lettere)
+        type: string
       - name: excerpt
         label: Riassunto nell'elenco del blog e nella home
         type: text
@@ -86,6 +109,15 @@ content:
       - name: description
         label: Descrizione per Google
         type: text
+      - name: featured
+        label: In evidenza nel disegno della casa (cantina)
+        type: boolean
+      - name: order
+        label: Posizione sul filo della camera oscura (1 = primo)
+        type: number
+      - name: image
+        label: Foto per il disegno della casa
+        type: image
       - name: permalink
         label: Indirizzo (non cambiare)
         type: string
@@ -100,6 +132,35 @@ content:
           - name: alt
             label: Testo alternativo (per chi non vede la foto)
             type: text
+
+  - name: projects
+    label: Progetti (Projects, la serra)
+    type: collection
+    path: src/projects
+    filename: "{primary}.md"
+    exclude: [projects.json]
+    view:
+      fields: [title, lang, order]
+      primary: title
+      sort: [order, title]
+      default:
+        sort: order
+        order: asc
+    fields:
+      - { name: title, label: Titolo, type: string, required: true }
+      - { name: description, label: Riga di descrizione, type: text }
+      - { name: url, label: Indirizzo (con https://), type: string, required: true }
+      - name: lang
+        label: Lingua
+        type: select
+        options:
+          values:
+            - { value: en, label: English }
+            - { value: it, label: Italiano (compare l'etichetta IT) }
+      - { name: image, label: Schermata del progetto, type: image }
+      - { name: tag, label: "Scritta al posto della foto (es. PAPER), se non c'e' la schermata", type: string }
+      - { name: featured, label: In evidenza nel disegno della casa, type: boolean }
+      - { name: order, label: Posizione (1 = primo posto), type: number }
 
   # ---------------- Pagine singole ----------------
   - name: home
@@ -153,3 +214,31 @@ content:
       - { name: image, label: Foto, type: image }
       - { name: image_alt, label: Testo alternativo della foto, type: text }
       - { name: body, label: Testo, type: rich-text }
+
+  - name: letters
+    label: Letters (la piccionaia, Substack)
+    type: file
+    path: src/_data/letters.json
+    format: json
+    fields:
+      - { name: url, label: Indirizzo del Substack (con https://), type: string, required: true }
+      - { name: label, label: Nome nel menu, type: string }
+      - name: latest
+        label: Titolo dell'ultima lettera (facoltativo; se lo lasci vuoto la riga non compare)
+        type: string
+      - name: also
+        label: Altre pubblicazioni nella piccionaia (cerchietto con una lettera)
+        type: object
+        list: true
+        fields:
+          - { name: key, label: Lettera nel cerchietto, type: string }
+          - { name: label, label: Nome, type: string }
+          - { name: url, label: Indirizzo (con https://), type: string }
+          - { name: note, label: Riga di descrizione (in inglese), type: string }
+          - name: lang
+            label: Lingua
+            type: select
+            options:
+              values:
+                - { value: en, label: English }
+                - { value: it, label: Italiano (compare l'etichetta IT) }

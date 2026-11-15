@@ -5,14 +5,20 @@ const fs = require("fs");
 const path = require("path");
 const MarkdownIt = require("markdown-it");
 const sharp = require("sharp");
+const build = require("./src/_data/build.js");
+const house = require("./lib/house.js");
+const letters = require("./src/_data/letters.json");
 
 const SRC_IMG = path.join(__dirname, "src", "img");
 const WIDTHS = [480, 960, 1600];
 const imageInfo = {}; // nome file -> {w, h}
+// "" sul sito, "/lab" nel laboratorio. Il plugin HTML Base (in fondo) gira PRIMA di "html-polish":
+// quando questa trasformazione vede l'HTML, i percorsi locali hanno gia' il prefisso.
+const BASE = build.prefix.slice(0, -1);
 
 function pad(n) { return String(n).padStart(2, "0"); }
 
-module.exports = function (eleventyConfig) {
+module.exports = async function (eleventyConfig) {
   // ---------- Markdown ----------
   const md = new MarkdownIt({ html: true, breaks: false, linkify: false });
   eleventyConfig.setLibrary("md", md);
@@ -46,6 +52,36 @@ module.exports = function (eleventyConfig) {
   };
   eleventyConfig.addCollection("tagList", (api) => group(api, "labels"));
   eleventyConfig.addCollection("categoryList", (api) => group(api, "categories"));
+
+  // ---------- La casa in sezione (home e pagine dei piani) ----------
+  // Un solo elenco di contenuti (articoli, gallerie, progetti) con gli stessi campi; lib/house.js decide
+  // quali stanno nei posti del disegno e quali solo nella legenda. Niente e' scritto a mano nel disegno.
+  const cleanUrl = (u) => {
+    const x = String(u).replace(/\.html$/, "");
+    return x === "/index" || x === "" ? "/" : x;
+  };
+  eleventyConfig.addCollection("house", (api) => {
+    const items = [];
+    for (const p of api.getFilteredByGlob("src/posts/*.md")) {
+      if (p.data.duplicate_of) continue; // la copia dello stesso articolo non compare
+      items.push(house.toItem("post", p.data, cleanUrl(p.url), false, p.date, SRC_IMG));
+    }
+    for (const p of api.getFilteredByGlob("src/galleries/*.md")) {
+      const d = { ...p.data };
+      if (!d.image && Array.isArray(d.gallery) && d.gallery[0]) d.image = d.gallery[0].image;
+      items.push(house.toItem("gallery", d, cleanUrl(p.url), false, null, SRC_IMG));
+    }
+    for (const p of api.getFilteredByGlob("src/projects/*.md")) {
+      const ext = /^https?:/.test(p.data.url || "");
+      items.push(house.toItem("project", p.data, p.data.url, ext, p.data.date ? p.date : null, SRC_IMG));
+    }
+    return house.build(items, letters);
+  });
+  eleventyConfig.addShortcode("houseDrawing", (h) => house.drawing(h));
+  eleventyConfig.addShortcode("houseDefs", (h) => house.defs(h));
+  eleventyConfig.addShortcode("houseCover", (h) => house.cover(h));
+  eleventyConfig.addShortcode("houseFloor", (h, key) => house.floor(h, key));
+  eleventyConfig.addShortcode("houseRemember", () => house.remember());
 
   // ---------- Filtri ----------
   // Nome etichetta -> URL come lo scriveva Squarespace: spazio = "+", "&" = "%26"
@@ -146,7 +182,7 @@ module.exports = function (eleventyConfig) {
 
     // 4) <img> locali: misure, srcset e caricamento pigro
     content = content.replace(/<img ([^>]*?)(\s*\/)?>/g, (m, attrs) => {
-      const src = (attrs.match(/src="\/img\/([^"\/]+)"/) || [])[1];
+      const src = (attrs.match(new RegExp('src="' + BASE + '/img/([^"/]+)"')) || [])[1];
       if (!src) return m;
       const info = imageInfo[src];
       let a = attrs;
@@ -155,9 +191,9 @@ module.exports = function (eleventyConfig) {
         if (!/srcset=/.test(a)) {
           const ext = path.extname(src);
           const stem = path.basename(src, ext);
-          const set = WIDTHS.filter((w) => info.w > w + 40).map((w) => `/img/w/${stem}-${w}${ext} ${w}w`);
+          const set = WIDTHS.filter((w) => info.w > w + 40).map((w) => `${BASE}/img/w/${stem}-${w}${ext} ${w}w`);
           if (set.length) {
-            set.push(`/img/${src} ${info.w}w`);
+            set.push(`${BASE}/img/${src} ${info.w}w`);
             a += ` srcset="${set.join(", ")}"`;
             if (!/sizes=/.test(a)) a += ` sizes="(max-width: 800px) 100vw, 800px"`;
           }
@@ -176,7 +212,16 @@ module.exports = function (eleventyConfig) {
     return content;
   });
 
+  // Nel laboratorio (PATH_PREFIX="/lab/") tutti i link, le immagini, il CSS e il JS ricevono il prefisso.
+  // Il plugin lavora prima di "html-polish" (vedi BASE in cima): le trasformazioni qui sopra ne tengono conto.
+  // Sul sito (nessun prefisso) non viene nemmeno attivato.
+  if (build.lab) {
+    const { EleventyHtmlBasePlugin } = await import("@11ty/eleventy");
+    eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
+  }
+
   return {
+    pathPrefix: build.prefix,
     dir: { input: "src", output: "_site", includes: "_includes", data: "_data" },
     markdownTemplateEngine: false, // il Markdown non passa da Nunjucks: le graffe nei testi restano testo
     htmlTemplateEngine: "njk",
