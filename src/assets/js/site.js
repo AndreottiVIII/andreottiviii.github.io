@@ -80,6 +80,16 @@
     s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(cfg.gaId);
     document.head.appendChild(s);
   }
+  /* cookie lasciati da Analytics (_ga, _ga_XXXX, _gid): si cancellano quando il consenso viene rifiutato o ritirato */
+  function clearGA() {
+    var host = location.hostname.split('.'), domains = [''];
+    for (var i = 0; i < host.length - 1; i++) domains.push('; domain=.' + host.slice(i).join('.'));
+    document.cookie.split(';').forEach(function (kv) {
+      var name = kv.split('=')[0].trim();
+      if (!/^_ga|^_gid$|^_gat/.test(name)) return;
+      domains.forEach(function (d) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + d; });
+    });
+  }
   if (banner) {
     var c = stored();
     if (c === 'granted') loadGA(); else if (c !== 'denied') banner.hidden = false;
@@ -87,7 +97,7 @@
       b.addEventListener('click', function () {
         var v = b.getAttribute('data-cookie'); store(v); banner.hidden = true;
         if (v === 'granted') loadGA();
-        else if (window.__gaLoaded) location.reload(); /* ritirato il consenso: ricarico senza Analytics */
+        else { clearGA(); if (window.__gaLoaded) location.reload(); } /* ritirato il consenso: via i cookie di Analytics, ricarico senza */
       });
     });
     $$('[data-cookie-open]').forEach(function (b) { b.addEventListener('click', function () { banner.hidden = false; }); });
