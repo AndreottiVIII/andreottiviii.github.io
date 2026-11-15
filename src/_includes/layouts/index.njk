@@ -1,0 +1,39 @@
+---
+layout: layouts/base.njk
+---
+{%- set H = collections.house -%}
+{%- set C = H | catalog(letters) -%}
+<div class="wrap idx">
+  <div class="title mono"><span>INDEX · SECTION A–A</span><span>{{ C.total }} ENTRIES</span></div>
+  <header class="front">
+    <div class="front-text">
+      <p class="mono kicker">CATALOGUE OF EVERY SHEET IN THE HOUSE</p>
+      <h1>Index</h1>
+      <p class="sub mono">librorum prohibitorum · every sheet in the house</p>
+      <dl class="imprint mono">
+        <div><dt>entries</dt><dd>{{ C.total }}</dd></div>
+        <div><dt>floors</dt><dd>{{ H.floors.length }} + dovecote</dd></div>
+        <div><dt>order</dt><dd>floor by floor, A to Z</dd></div>
+        <div><dt>place</dt><dd>Milan</dd></div>
+      </dl>
+    </div>
+    {%- if image %}
+    <figure class="front-img"><img src="{{ image }}" alt="{{ image_alt or 'The Index Librorum Prohibitorum' }}" sizes="(max-width: 900px) 100vw, 520px" loading="eager"></figure>
+    {%- endif %}
+  </header>
+  {%- for s in C.sections %}
+  <section class="cat" id="{{ s.key }}">
+    <h2><a href="{{ s.url }}"{% if s.ext %} target="_blank" rel="noopener"{% endif %}><b>{{ s.room }}</b> <span>{{ s.name }}</span></a></h2>
+    <ol class="entries">
+      {%- for e in s.entries %}
+      <li><i>{{ e.n }}</i><a class="et" href="{{ e.url }}">{{ e.title }}</a>{% if e.lang == 'it' %} <span class="it">IT</span>{% endif %}<span class="lead" aria-hidden="true"></span><span class="fy mono">{{ s.room | lower }}{% if e.year %} · {{ e.year }}{% endif %}</span></li>
+      {%- endfor %}
+    </ol>
+  </section>
+  {%- endfor %}
+  <nav class="stairs" aria-label="Other pages">
+    <a class="up" href="/post"><span class="lbl">↑ the register</span>Blog</a>
+    <a class="whole" href="/">The whole house</a>
+    <a class="down" href="/contact-davidecaniatti"><span class="lbl">about →</span>About</a>
+  </nav>
+</div>

@@ -7,6 +7,9 @@
   {%- elif f.more %}
   <li class="more"><a href="{{ f.url }}">and {{ f.more }} more →</a></li>
   {%- endif %}
+  {%- if f.key == 'writing' %}
+  <li class="more idx-li"><a href="/blog-index">The index of every sheet in the house →</a></li>
+  {%- endif %}
   {%- if not f.count %}
   <li class="empty">Nothing here yet.</li>
   {%- endif %}

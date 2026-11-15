@@ -1,10 +1,28 @@
 ---
 layout: layouts/base.njk
 ---
-<section class="gallery-page" aria-label="{{ title }}">
-  <div class="gallery-grid" data-lightbox>
+{%- set drawers = site.work -%}
+{%- set cur = page.url | cleanUrl -%}
+{%- set idx = drawers | urlIndex(cur) -%}
+{%- set nextD = drawers[(idx + 1) % drawers.length] -%}
+<div class="wrap gal">
+  <div class="title mono"><span>DARKROOM · PRINT DRAWER {{ idx + 1 }} OF {{ drawers.length }}</span><span>{{ gallery.length }} PRINTS</span></div>
+  <header class="fl-head">
+    <div class="h"><b>Darkroom</b><a href="/photography">← all {{ drawers.length }} galleries</a></div>
+    <h1>{{ title }}</h1>
+    <p class="count mono">{{ gallery.length }} prints · tap one to see it whole</p>
+  </header>
+  <section class="prints" aria-label="{{ title }}" data-lightbox>
     {%- for g in gallery %}
-    <a class="lb" href="{{ g.image }}" data-alt="{{ g.alt }}"><img src="{{ g.image }}" alt="{{ g.alt }}" sizes="(max-width: 700px) 50vw, 33vw">{% if fullsize_label != false %}<span class="sr-only">View fullsize</span>{% endif %}</a>
+    <a class="lb" href="{{ g.image }}" data-alt="{{ g.alt }}"><img src="{{ g.image }}" alt="{{ g.alt }}" sizes="(max-width: 600px) 50vw, (max-width: 1000px) 33vw, 300px">{% if fullsize_label != false %}<span class="sr-only">View fullsize</span>{% endif %}<span class="pn" aria-hidden="true"><i>{{ loop.index | pad2 }}</i><span>print {{ loop.index | pad2 }} of {{ gallery.length }}</span></span></a>
     {%- endfor %}
-  </div>
-</section>
+  </section>
+  <div class="others"><p class="k">THE {{ drawers.length }} DRAWERS OF THE DARKROOM</p><ol>
+    {%- for d in drawers %}<li><a href="{{ d.url }}"{% if d.url == cur %} aria-current="page"{% endif %}><i>{{ loop.index }}</i>{{ d.title }}</a></li>{% endfor %}
+  </ol></div>
+  <nav class="stairs" aria-label="Other galleries">
+    <a class="up" href="/photography"><span class="lbl">↑ up</span>Photography</a>
+    <a class="whole" href="/">The whole house</a>
+    <a class="down" href="{{ nextD.url }}"><span class="lbl">next drawer →</span>{{ nextD.title }}</a>
+  </nav>
+</div>

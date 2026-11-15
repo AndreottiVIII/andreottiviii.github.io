@@ -1,18 +1,9 @@
-/* davidecaniatti.com - JS leggero: menu, lightbox, slideshow, cookie/Analytics. Nessuna libreria. */
+/* davidecaniatti.com - JS leggero: lightbox, cookie/Analytics. Nessuna libreria. */
 (function () {
   'use strict';
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var cfg = window.SITE || {};
-
-  /* ---- menu da telefono ---- */
-  var tg = $('.nav-toggle'), nav = $('#site-nav');
-  if (tg && nav) {
-    tg.addEventListener('click', function () {
-      var o = nav.classList.toggle('open');
-      tg.setAttribute('aria-expanded', o ? 'true' : 'false');
-    });
-  }
 
   /* ---- immagini che non si caricano (quelle gia' rotte sul vecchio sito) ---- */
   function markBroken(img) { img.classList.add('broken'); }
@@ -66,27 +57,6 @@
     else if (e.key === 'ArrowLeft') show(idx - 1);
     else if (e.key === 'ArrowRight') show(idx + 1);
   });
-
-  /* ---- slideshow della home ---- */
-  var ss = $('[data-slideshow]');
-  if (ss) {
-    var slides = $$('.slide', ss), cur = 0, timer = null, thumbs = $$('[data-thumbs] .thumb');
-    thumbs.forEach(function (t, i) { t.addEventListener('click', function () { go(i); play(); }); });
-    var go = function (n) {
-      slides[cur].classList.remove('is-active');
-      cur = (n + slides.length) % slides.length;
-      var im = $('img', slides[cur]); if (im) im.loading = 'eager';
-      slides[cur].classList.add('is-active');
-      thumbs.forEach(function (t, i) { t.classList.toggle('is-active', i === cur); });
-    };
-    var play = function () {
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      clearInterval(timer); timer = setInterval(function () { go(cur + 1); }, 5000);
-    };
-    $('.slide-prev', ss).addEventListener('click', function () { go(cur - 1); play(); });
-    $('.slide-next', ss).addEventListener('click', function () { go(cur + 1); play(); });
-    play();
-  }
 
   /* ---- cookie e Google Analytics ---- */
   var KEY = 'dc-consent';

@@ -11,16 +11,18 @@ eleventyExcludeFromCollections: true
 eleventyComputed:
   canonical: "{% if pagination.pageNumber == 0 %}/post{% else %}/post/page/{{ pagination.pageNumber + 1 }}{% endif %}"
 ---
-<div class="archive">
-{% include "post-list.njk" %}
-<nav class="archive-nav" aria-label="Pagination">
-  {%- if pagination.pageNumber > 0 %}
-  <a class="newer" href="{% if pagination.pageNumber == 1 %}/post{% else %}/post/page/{{ pagination.pageNumber }}{% endif %}">Newer Posts</a>
-  {%- else %}<span></span>{% endif %}
-  {%- if pagination.pageNumber < pagination.pages.length - 1 %}
-  <a class="older" href="/post/page/{{ pagination.pageNumber + 2 }}">Older Posts</a>
-  {%- endif %}
-</nav>
+{%- set kind = 'all' -%}
+{%- set firstNo = collections.posts.length - pagination.pageNumber * 20 -%}
+{% include "register.njk" %}
+  <nav class="stairs" aria-label="Pagination">
+    {%- if pagination.pageNumber > 0 %}
+    <a class="newer" href="{% if pagination.pageNumber == 1 %}/post{% else %}/post/page/{{ pagination.pageNumber }}{% endif %}"><span class="lbl">← newer</span>Newer Posts</a>
+    {%- else %}<a class="up" href="/writing"><span class="lbl">↑ up</span>Writing</a>{% endif %}
+    <a class="whole" href="/">The whole house</a>
+    {%- if pagination.pageNumber < pagination.pages.length - 1 %}
+    <a class="older down" href="/post/page/{{ pagination.pageNumber + 2 }}"><span class="lbl">older →</span>Older Posts</a>
+    {%- else %}<a class="down" href="/workshop"><span class="lbl">↓ down</span>Workshop</a>{% endif %}
+  </nav>
 </div>
 <script>
 /* Vecchi indirizzi del blog: /post?tag=X, /post?category=X, /post?offset=N */

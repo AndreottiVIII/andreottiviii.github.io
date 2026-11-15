@@ -1,6 +1,6 @@
 ---
 title: "Lexodus"
-url: https://andreottiviii.github.io/lexodus/
+url: https://davidecaniatti.com/lexodus/
 description: "The network of borrowed words between languages, with Italian at the centre."
 lang: en
 order: 2
