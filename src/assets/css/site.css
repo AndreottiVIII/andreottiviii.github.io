@@ -170,7 +170,7 @@ body.lb-open { overflow: hidden; }
 .archive-title::before { content: attr(data-kind) ": " attr(data-title); }
 .archive-title { font-size: 1.4rem; font-weight: 600; margin: 0.2em 0 1.2em; }
 .blog-list { display: flex; flex-direction: column; gap: 56px; }
-.blog-item { display: grid; grid-template-columns: 1fr; gap: 14px; }
+.blog-item { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
 .blog-image { display: block; aspect-ratio: 3 / 2; overflow: hidden; background: #f3f3f3; }
 .blog-image img { width: 100%; height: 100%; object-fit: cover; }
 .blog-meta { font-size: 0.8rem; color: var(--grey); }
