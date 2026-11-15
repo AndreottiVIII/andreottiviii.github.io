@@ -421,6 +421,7 @@ img.broken { display: none; }
 .lightbox .lb-next { right: 10px; top: 50%; transform: translateY(-50%); }
 .lightbox .lb-count { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; color: #d9705e; font: 400 12px "Overpass Mono", monospace; letter-spacing: .08em; pointer-events: none; }
 .lightbox :focus-visible { outline-color: #f1d9d2; }
+.lightbox.single .lb-prev, .lightbox.single .lb-next, .lightbox.single .lb-count { display: none; }
 body.lb-open { overflow: hidden; }
 @media (max-width: 600px) { .lightbox .lb-prev, .lightbox .lb-next { top: auto; bottom: 8px; transform: none; } .lightbox img { max-height: 80vh; } }
 

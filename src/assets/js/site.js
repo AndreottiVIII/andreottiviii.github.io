@@ -43,6 +43,7 @@
     if (!box) build();
     opener = document.activeElement;
     list = links; box.classList.add('open'); document.body.classList.add('lb-open');
+    box.classList.toggle('single', links.length < 2); /* una foto sola: niente frecce */
     show(i); $('.lb-close', box).focus();
   }
   function close() {
@@ -61,6 +62,13 @@
     if (e.key === 'Escape') close();
     else if (e.key === 'ArrowLeft') show(idx - 1);
     else if (e.key === 'ArrowRight') show(idx + 1);
+    else if (e.key === 'Tab') {
+      /* la tastiera resta dentro la lightbox finche' e' aperta */
+      var b = $$('button', box).filter(function (x) { return x.offsetParent !== null; });
+      var k = b.indexOf(document.activeElement);
+      e.preventDefault();
+      b[(k + (e.shiftKey ? -1 : 1) + b.length) % b.length].focus();
+    }
   });
 
   /* ---- cookie e Google Analytics ---- */
