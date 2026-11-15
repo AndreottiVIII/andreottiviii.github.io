@@ -306,6 +306,11 @@ img.broken { display: none; }
 
 /* la libreria dello studio nel disegno e' un link all'Index */
 .idx-hit:hover, .idx-hit:focus-visible { outline: 1.5px solid var(--ink); overflow: visible; }
+/* scritte delle stanze nel disegno: link alla pagina del piano */
+.rl-hit { position: absolute; display: block; }
+.rl-hit:hover, .rl-hit:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 2px; }
+.rl-hit.dark:hover, .rl-hit.dark:focus-visible { outline-color: #e5705b; }
+.rlabel:hover, .rlabel:focus-visible { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .draw-wrap:has(.idx-hit:hover) .idx-plate, .fwrap:has(.idx-hit:hover) .idx-plate { background: var(--ink); color: var(--paper); }
 
 /* ---------- articolo: la tavola con il cartiglio ---------- */
