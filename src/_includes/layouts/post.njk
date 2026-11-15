@@ -22,10 +22,10 @@ layout: layouts/base.njk
       {%- if sh.i >= 0 %}
       <div><span class="k">sheet</span><span class="v">{{ sh.i + 1 }} of {{ sh.n }} in the {{ roomName | lower }}</span></div>
       {%- endif %}
-      {%- if categories %}
+      {%- if categories | length %}
       <div><span class="k">category</span><div class="plates">{% for c in categories %}<a href="{{ c | categoryUrl }}">{{ c }}</a>{% endfor %}</div></div>
       {%- endif %}
-      {%- if labels %}
+      {%- if labels | length %}
       <div><span class="k">tags</span><div class="plates">{% for t in labels %}<a href="{{ t | tagUrl }}" rel="tag">{{ t }}</a>{% endfor %}</div></div>
       {%- endif %}
     </aside>
@@ -36,10 +36,10 @@ layout: layouts/base.njk
       <div class="pb post-body e-content">
 {{ body | safe }}
       </div>
-      {%- if categories or labels %}
+      {%- if (categories | length) or (labels | length) %}
       <footer class="endtags">
-        {%- if categories %}<p class="k">CATEGORY</p><div class="plates">{% for c in categories %}<a href="{{ c | categoryUrl }}">{{ c }}</a>{% endfor %}</div>{% endif %}
-        {%- if labels %}<p class="k">TAGS</p><div class="plates">{% for t in labels %}<a href="{{ t | tagUrl }}" rel="tag">{{ t }}</a>{% endfor %}</div>{% endif %}
+        {%- if categories | length %}<p class="k">CATEGORY</p><div class="plates">{% for c in categories %}<a href="{{ c | categoryUrl }}">{{ c }}</a>{% endfor %}</div>{% endif %}
+        {%- if labels | length %}<p class="k">TAGS</p><div class="plates">{% for t in labels %}<a href="{{ t | tagUrl }}" rel="tag">{{ t }}</a>{% endfor %}</div>{% endif %}
       </footer>
       {%- endif %}
       <nav class="stairs" aria-label="Other sheets in the {{ roomName | lower }}">
