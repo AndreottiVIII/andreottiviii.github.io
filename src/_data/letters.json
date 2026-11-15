@@ -1,5 +1,14 @@
 {
   "url": "https://davidecaniatti.substack.com",
   "label": "Letters",
-  "latest": ""
+  "latest": "",
+  "also": [
+    {
+      "key": "A",
+      "label": "Ariosto Daily",
+      "url": "https://ariostodaily.substack.com",
+      "note": "the Orlando furioso, a few stanzas every morning",
+      "lang": "it"
+    }
+  ]
 }

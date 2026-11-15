@@ -12,5 +12,8 @@
   {%- endif %}
   {%- if withLetters %}
   <li class="lt-li"><i>L</i><a href="{{ letters.url }}" target="_blank" rel="noopener">{{ letters.label }}, on Substack ↗</a>{% if letters.latest %}<span class="ph">{{ letters.latest }}</span>{% endif %}</li>
+  {%- for a in letters.also %}
+  <li class="lt-li"><i>{{ a.key }}</i><a href="{{ a.url }}" target="_blank" rel="noopener">{{ a.label }}, on Substack ↗</a>{% if a.lang == 'it' %} <span class="it">IT</span>{% endif %}</li>
+  {%- endfor %}
   {%- endif %}
 </ol>
