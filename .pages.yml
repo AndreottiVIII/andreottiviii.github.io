@@ -198,20 +198,37 @@ content:
     path: src/_data/letters.json
     format: json
     fields:
-      - { name: url, label: Indirizzo del Substack (con https://), type: string, required: true }
-      - { name: label, label: Nome nel menu, type: string }
+      - { name: label, label: Nome nel menu e titolo della pagina, type: string }
+      - { name: url, label: Indirizzo del tuo profilo Substack (con https://), type: string, required: true }
+      - name: page
+        label: Indirizzo della pagina sul sito (lascialo /letters)
+        type: string
+      - name: blurb
+        label: Frase sotto il titolo della pagina (in inglese)
+        type: string
+      - name: description
+        label: Descrizione per Google (in inglese, circa 150 caratteri)
+        type: text
       - name: latest
         label: Titolo dell'ultima lettera (facoltativo; se lo lasci vuoto la riga non compare)
         type: string
+      - name: profile
+        label: Scheda del profilo (la prima della pagina, cerchietto L)
+        type: object
+        fields:
+          - { name: title, label: Titolo della scheda, type: string }
+          - { name: note, label: Riga di descrizione (in inglese, minuscola iniziale), type: string }
+          - { name: image, label: Immagine (orizzontale, circa 900 x 563), type: image }
       - name: also
-        label: Altre pubblicazioni nella piccionaia (cerchietto con una lettera)
+        label: Altre pubblicazioni (cerchietto con una lettera; nel disegno ci stanno le prime due)
         type: object
         list: true
         fields:
           - { name: key, label: Lettera nel cerchietto, type: string }
           - { name: label, label: Nome, type: string }
           - { name: url, label: Indirizzo (con https://), type: string }
-          - { name: note, label: Riga di descrizione (in inglese), type: string }
+          - { name: note, label: Riga di descrizione (in inglese, minuscola iniziale), type: string }
+          - { name: image, label: Immagine della scheda (orizzontale, circa 900 x 563), type: image }
           - name: lang
             label: Lingua
             type: select
