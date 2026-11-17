@@ -1,0 +1,31 @@
+---
+# Rinvii dai vecchi indirizzi dei progetti spostati nello spazio GitHub andreottiviii-progetti (17/11/2026).
+# Prima si aprivano da davidecaniatti.com/<nome>/ (e da andreottiviii.github.io/<nome>/, che rimanda qui):
+# il rinvio tiene vivi i link gia' dati e il QR di Capodanno 28, anche con la parte dopo # (es. #benvenuto).
+# Pagine invisibili: fuori dalla sitemap e dalle raccolte, noindex.
+pagination:
+  data: rinvii
+  size: 1
+  alias: r
+permalink: "/{{ r.nome }}/index.html"
+eleventyExcludeFromCollections: true
+rinvii:
+  - nome: radici
+  - nome: cantina-web
+  - nome: capodanno-28
+  - nome: aia-o-non-aia
+---
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Indirizzo spostato</title>
+<script>location.replace("https://andreottiviii-progetti.github.io/{{ r.nome }}/" + location.search + location.hash);</script>
+<meta http-equiv="refresh" content="0; url=https://andreottiviii-progetti.github.io/{{ r.nome }}/">
+</head>
+<body>
+<p><a href="https://andreottiviii-progetti.github.io/{{ r.nome }}/">Questa pagina si è spostata.</a></p>
+</body>
+</html>
