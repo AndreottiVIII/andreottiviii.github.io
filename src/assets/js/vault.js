@@ -89,7 +89,22 @@
       .then(function (r) { if (!r.ok) throw new Error('empty'); return r.json(); })
       .then(function (m) { meta = m; return deriveKey(pw, b64(m.salt), m.iter); })
       .then(function (key) {
-        return open(key, b64(meta.iv), b64(meta.ct)).then(function (p) { input.value = ''; say(''); render(key, JSON.parse(dec.decode(p))); });
+        /* v1: una sola porta, la chiave apre anche le foto */
+        if (!meta.doors) return open(key, b64(meta.iv), b64(meta.ct)).then(function (p) { input.value = ''; say(''); render(key, JSON.parse(dec.decode(p))); });
+        /* v2: piu' porte, ognuna con la sua combinazione. Si prova la chiave su tutte: si apre solo quella giusta */
+        var tries = meta.doors.map(function (d) { return open(key, b64(d.iv), b64(d.ct)).then(function (p) { return JSON.parse(dec.decode(p)); }, function () { return null; }); });
+        return Promise.all(tries).then(function (found) {
+          var door = found.filter(Boolean)[0];
+          if (!door) throw new Error('wrong');
+          input.value = '';
+          if (door.type === 'go') {
+            say('Opening…');
+            /* la password del sito di arrivo viaggia dopo il #: non arriva mai a nessun server */
+            location.replace(door.url + (door.pass ? '#p=' + encodeURIComponent(door.pass) : ''));
+            return;
+          }
+          return crypto.subtle.importKey('raw', b64(door.ck), 'AES-GCM', false, ['decrypt']).then(function (ck) { say(''); render(ck, door); });
+        });
       })
       .catch(function (err) { say(err && err.message === 'empty' ? 'The vault is empty for now.' : 'Wrong combination.'); input.select(); });
   });
