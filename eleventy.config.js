@@ -214,7 +214,8 @@ module.exports = async function (eleventyConfig) {
     }
     // Indirizzi con la barra finale (/post/x/): Squarespace li accettava, GitHub Pages risponde 404 (Google se ne e' lamentato
     // per l'articolo su Hirst il 26/11). Per ogni pagina x.html si scrive x/index.html che rimanda subito a /x (canonical +
-    // refresh + script). Solo dove la cartella x/ non c'e' gia' (es. /post/ contiene gli articoli: li' non si tocca nulla).
+    // refresh + script). Anche dentro cartelle che esistono gia' (es. /post/), purche' non abbiano gia' un index.html: provato sul
+    // laboratorio che GitHub Pages continua a servire x.html all'indirizzo senza barra.
     const pre = (build.prefix || "/").replace(/\/$/, "");
     const stubs = [];
     const walk = (d) => {
@@ -222,7 +223,7 @@ module.exports = async function (eleventyConfig) {
         const p = path.join(d, e.name);
         if (e.isDirectory()) { if (!["img", "assets", "fonts", "vault-box"].includes(e.name)) walk(p); continue; }
         if (!e.name.endsWith(".html") || e.name === "index.html" || e.name === "404.html") continue;
-        if (fs.existsSync(p.slice(0, -5))) continue;
+        if (fs.existsSync(path.join(p.slice(0, -5), "index.html"))) continue;
         stubs.push(p);
       }
     };
@@ -232,7 +233,7 @@ module.exports = async function (eleventyConfig) {
       const target = pre + "/" + rel;
       const abs = (siteData.url || "https://davidecaniatti.com").replace(/\/$/, "") + target;
       const esc = (x) => x.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
-      fs.mkdirSync(p.slice(0, -5));
+      fs.mkdirSync(p.slice(0, -5), { recursive: true });
       fs.writeFileSync(path.join(p.slice(0, -5), "index.html"), `<!DOCTYPE html>
 <html lang="en">
 <head>
