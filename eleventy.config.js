@@ -212,6 +212,41 @@ module.exports = async function (eleventyConfig) {
         fs.writeFileSync(f, h);
       }
     }
+    // Indirizzi con la barra finale (/post/x/): Squarespace li accettava, GitHub Pages risponde 404 (Google se ne e' lamentato
+    // per l'articolo su Hirst il 26/11). Per ogni pagina x.html si scrive x/index.html che rimanda subito a /x (canonical +
+    // refresh + script). Solo dove la cartella x/ non c'e' gia' (es. /post/ contiene gli articoli: li' non si tocca nulla).
+    const pre = (build.prefix || "/").replace(/\/$/, "");
+    const stubs = [];
+    const walk = (d) => {
+      for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+        const p = path.join(d, e.name);
+        if (e.isDirectory()) { if (!["img", "assets", "fonts", "vault-box"].includes(e.name)) walk(p); continue; }
+        if (!e.name.endsWith(".html") || e.name === "index.html" || e.name === "404.html") continue;
+        if (fs.existsSync(p.slice(0, -5))) continue;
+        stubs.push(p);
+      }
+    };
+    walk(dir.output);
+    for (const p of stubs) {
+      const rel = path.relative(dir.output, p).split(path.sep).join("/").slice(0, -5);
+      const target = pre + "/" + rel;
+      const abs = (siteData.url || "https://davidecaniatti.com").replace(/\/$/, "") + target;
+      const esc = (x) => x.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+      fs.mkdirSync(p.slice(0, -5));
+      fs.writeFileSync(path.join(p.slice(0, -5), "index.html"), `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Moved</title>
+<link rel="canonical" href="${esc(abs)}">
+<meta http-equiv="refresh" content="0; url=${esc(target)}">
+<script>location.replace(${JSON.stringify(target)} + location.search + location.hash);</script>
+</head>
+<body><p><a href="${esc(target)}">${esc(target)}</a></p></body>
+</html>
+`);
+    }
+
     const outW = path.join(dir.output, "img", "w");
     fs.mkdirSync(outW, { recursive: true });
     const cache = path.join(__dirname, ".cache", "img-w");
