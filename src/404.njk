@@ -19,3 +19,5 @@ eleventyExcludeFromCollections: true
     </div>
   </div>
 </div>
+{#- indirizzo con la barra finale che non ha una pagina di rinvio (es. /post/): si riprova senza barra, una volta sola -#}
+<script>(function(){var p=location.pathname;if(p.length>1&&p.slice(-1)==="/")location.replace(p.replace(/\/+$/,"")+location.search+location.hash);})();</script>
