@@ -1,0 +1,22 @@
+---
+# Rinvii dai vecchi indirizzi del blog (elenco e spiegazione in _data/vecchiIndirizzi.js).
+pagination:
+  data: vecchiIndirizzi
+  size: 1
+  alias: r
+permalink: "{{ r.file }}"
+eleventyExcludeFromCollections: true
+---
+{%- set BASE = build.prefix.slice(0, -1) -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Moved</title>
+<link rel="canonical" href="{{ r.to | absUrl(site.url) }}">
+{% if build.mockup %}<meta name="robots" content="noindex, nofollow">
+{% endif %}<meta http-equiv="refresh" content="0; url={{ BASE }}{{ r.to }}">
+<script>location.replace({{ (BASE + r.to) | dump | safe }} + location.search + location.hash);</script>
+</head>
+<body><p><a href="{{ r.to }}">{{ r.to }}</a></p></body>
+</html>
