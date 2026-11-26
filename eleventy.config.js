@@ -239,7 +239,7 @@ module.exports = async function (eleventyConfig) {
 <meta charset="utf-8">
 <title>Moved</title>
 <link rel="canonical" href="${esc(abs)}">
-${build.lab ? '<meta name="robots" content="noindex">\n' : ""}<meta http-equiv="refresh" content="0; url=${esc(target)}">
+${build.mockup ? '<meta name="robots" content="noindex, nofollow">\n' : ""}<meta http-equiv="refresh" content="0; url=${esc(target)}">
 <script>location.replace(${JSON.stringify(target)} + location.search + location.hash);</script>
 </head>
 <body><p><a href="${esc(target)}">${esc(target)}</a></p></body>
